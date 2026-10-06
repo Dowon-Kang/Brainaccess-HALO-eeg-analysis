@@ -1,4 +1,4 @@
-"""Optional real PsychoPy/Qt/OpenGL smoke test with synthetic keyboard responses.
+r"""Optional real PsychoPy/Qt/OpenGL smoke test with synthetic keyboard responses.
 
 Run from the project root: .venv\Scripts\python.exe -X utf8 tests\gui_smoke.py
 Opens small windows, closes them automatically, and uses a temporary CSV directory.
@@ -6,6 +6,7 @@ This checks rendering/integration, not display calibration or real keyboard late
 """
 
 import csv
+import importlib
 import sys
 import tempfile
 from pathlib import Path
@@ -13,7 +14,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import python_sart_eeg_analysis_v2 as task
+import python_sart as task
 from sart_data import INFO_FIELDS
 
 
@@ -27,7 +28,8 @@ def read_csv(path):
 
 def main():
     task.load_psychopy()
-    from psychopy.gui.qtgui import QtCore
+    from psychopy.gui import qtgui
+    QtCore = importlib.import_module(f"{qtgui.haveQt}.QtCore")
     # Exercise the real dialog API, including the mapping returned by PsychoPy 2026.
     class AutoDialog(task.gui.Dlg):
         def addField(self, key, *args, **kwargs):
@@ -82,17 +84,17 @@ def main():
                 assert abs(result['go_omission_rate_pct'] - 100 / 3) < 1e-9
                 assert result['nogo_commission_rate_pct'] == 100
                 assert result['median_correct_go_rt_ms'] >= 100
-        participants = read_csv(root / 'participants.csv')
-        sessions = read_csv(root / 'sessions.csv')
-        trials = read_csv(root / 'trials.csv')
+        raw_paths = list((root / 'raw').glob('*.csv'))
+        trials = [row for path in raw_paths for row in read_csv(path)]
         overall = [row for row in read_csv(root / 'summary.csv') if row['window'] == 'overall']
-        assert len(participants) == len(sessions) == 1
+        assert len(raw_paths) == 2
         assert len(trials) == 8 and len(overall) == 2
         assert len({row['run_id'] for row in trials}) == 2
         assert {row['phase'] for row in trials} == {'pre', 'post'}
         assert all(row['status'] == 'ABORTED' for row in overall)
         assert all(float(row['stimulus_onset_elapsed_s']) >= 0 for row in trials)
-    print('Real PsychoPy window, digit/mask/feedback, PRE/POST CSV, mid-block ESC: OK')
+        assert all((root / row['raw_file']).is_file() for row in overall)
+    print('Real PsychoPy window, digit/mask, PRE/POST raw CSV, mid-block ESC: OK')
     print('GUI_SMOKE_OK (synthetic responses; temporary data removed)')
 
 

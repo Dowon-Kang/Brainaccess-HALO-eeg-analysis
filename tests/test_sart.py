@@ -8,8 +8,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-import python_sart
-import python_sart_eeg_analysis_v2 as task
+import python_sart as task
 from sart_data import (
     INFO_FIELDS, ExperimentStore, calculate_summary, extract_info_values,
     summarize_trials, validate_participant_info, validate_settings,
@@ -116,12 +115,12 @@ class StorageTests(unittest.TestCase):
         self.addCleanup(store.close)
         return store
 
-    def test_pre_post_rerun_link_ids_append_and_checkpoint(self):
+    def test_pre_post_rerun_raw_files_append_summary_and_checkpoint(self):
         pre = self.store()
         row = trial(start=pre.start_perf_s + 1)
         pre.record_trial(row)
         # The row is readable before finish() or return from its block.
-        saved = read_table(self.root, "trials.csv")
+        saved = read_table(self.root, pre.raw_path.relative_to(self.root))
         self.assertEqual(len(saved), 1)
         self.assertAlmostEqual(float(saved[0]["stimulus_onset_elapsed_s"]), 1)
         pre.finish("COMPLETED")
@@ -130,40 +129,51 @@ class StorageTests(unittest.TestCase):
         post.finish("ABORTED")
         rerun = self.store()
         rerun.finish("ABORTED")
-        self.assertEqual(pre.session_id, post.session_id)
         self.assertEqual(len({pre.run_id, post.run_id, rerun.run_id}), 3)
-        self.assertEqual(len(read_table(self.root, "participants.csv")), 1)
-        self.assertEqual(len(read_table(self.root, "sessions.csv")), 1)
-        trials = read_table(self.root, "trials.csv")
+        raw_paths = list((self.root / "raw").glob("*.csv"))
+        self.assertEqual(len(raw_paths), 3)
+        trials = [*read_table(self.root, pre.raw_path.relative_to(self.root)),
+                  *read_table(self.root, post.raw_path.relative_to(self.root))]
         self.assertEqual(len(trials), 2)
         self.assertEqual(trials[1]["rt_ms"], "")
         self.assertEqual(trials[1]["accuracy"], "1")
+        self.assertEqual(trials[0]["participant_id"], "P001")
+        self.assertEqual(trials[0]["session"], "1")
+        self.assertEqual(trials[0]["gender"], "Female")
         overall = [row for row in read_table(self.root, "summary.csv") if row['window'] == 'overall']
         self.assertEqual([row['status'] for row in overall], ['COMPLETED', 'ABORTED', 'ABORTED'])
         self.assertEqual(overall[1]["planned_main_trials"], "540")
         self.assertEqual(overall[2]["go_omission_rate_pct"], "")
         self.assertTrue(overall[0]["run_started_at"].endswith("+00:00"))
+        self.assertEqual(overall[0]["raw_file"], str(pre.raw_path.relative_to(self.root)))
         self.assertEqual({file.name for file in self.root.iterdir()},
-                         {"participants.csv", "sessions.csv", "trials.csv", "summary.csv"})
+                         {"raw", "summary.csv"})
 
-    def test_metadata_conflict_does_not_overwrite_existing_data(self):
+    def test_each_run_keeps_metadata_without_overwriting_previous_raw_data(self):
         first = self.store()
+        first.record_trial(trial(start=first.start_perf_s + 1))
         first.finish("COMPLETED")
-        before = {path.name: path.read_bytes() for path in self.root.iterdir()}
+        before = first.raw_path.read_bytes()
         for index, value in [(4, "Male"), (3, "C1")]:
             with self.subTest(index=index):
                 values = INFO.copy()
                 values[index] = value
-                with self.assertRaises(ValueError):
-                    self.store(info=values)
-                self.assertEqual(before, {path.name: path.read_bytes() for path in self.root.iterdir()})
+                current = self.store(info=values)
+                current.record_trial(trial(start=current.start_perf_s + 1))
+                current.finish("COMPLETED")
+                saved = read_table(self.root, current.raw_path.relative_to(self.root))
+                field = "gender" if index == 4 else "condition"
+                self.assertEqual(saved[0][field], value)
+                self.assertEqual(before, first.raw_path.read_bytes())
 
-    def test_corrupt_header_rejected_before_appending_metadata(self):
+    def test_corrupt_summary_header_rejected_without_overwriting_it(self):
         self.root.mkdir()
-        (self.root / "trials.csv").write_text("wrong,header\n", encoding="utf-8")
+        summary = self.root / "summary.csv"
+        summary.write_text("wrong,header\n", encoding="utf-8")
+        before = summary.read_bytes()
         with self.assertRaises(ValueError):
             self.store()
-        self.assertFalse((self.root / "participants.csv").exists())
+        self.assertEqual(summary.read_bytes(), before)
 
     def test_invalid_inputs_do_not_create_an_output_directory(self):
         values = INFO.copy()
@@ -174,9 +184,12 @@ class StorageTests(unittest.TestCase):
 
 
 class RuntimeTests(unittest.TestCase):
-    def test_both_entry_points_share_the_same_task(self):
-        self.assertIs(python_sart.sart, task.sart)
-        self.assertIs(python_sart.main, task.main)
+    def test_entry_point_selects_pre_and_post_trial_counts(self):
+        for phase, reps in [("pre", 5), ("post", 12)]:
+            with self.subTest(phase=phase), patch.object(task, 'sart') as run:
+                self.assertEqual(task.main(["--phase", phase]), 0)
+                self.assertEqual(run.call_args.kwargs['reps'], reps)
+                self.assertEqual(run.call_args.kwargs['phase'], phase)
 
     def test_gui_uses_mapping_values(self):
         dialog = Mock(OK=True, data=dict(zip(INFO_FIELDS, INFO)))
@@ -205,7 +218,8 @@ class RuntimeTests(unittest.TestCase):
                  patch.object(task, 'sart_block', side_effect=run_block), redirect_stdout(io.StringIO()):
                 summary = task.sart(path=root, part_info=INFO)
             self.assertEqual(summary['completed_trials'], 2)
-            self.assertEqual(len(read_table(root, 'trials.csv')), 2)
+            raw_path = next((root / 'raw').glob('*.csv'))
+            self.assertEqual(len(read_table(root, raw_path.relative_to(root))), 2)
             self.assertEqual(read_table(root, 'summary.csv')[0]['status'], 'ABORTED')
             window.close.assert_called_once()
 
@@ -263,7 +277,7 @@ class TrialTests(unittest.TestCase):
         with patch.object(task, 'time', SimpleNamespace(perf_counter=lambda: now[0])), \
              patch.object(task, 'core', SimpleNamespace(wait=lambda duration: now.__setitem__(0, now[0] + duration))), \
              patch.object(task, 'event', SimpleNamespace(clearEvents=Mock(), getKeys=get_keys)):
-            row = task.sart_trial(win, True, 3, stim, stim, stim, stim, clock,
+            row = task.sart_trial(win, 3, stim, stim, stim, clock,
                                   1.2, number, 1, 1, Mock())
         self.assertAlmostEqual(reset_at[0], 1 / 60)
         self.assertAlmostEqual(row['stimulus_onset_perf_s'], reset_at[0])
@@ -281,7 +295,7 @@ class TrialTests(unittest.TestCase):
                 self.assertEqual(row['rt_ms'], rt)
 
     def test_response_past_window_is_excluded(self):
-        # The final mask flip can end just after the 900 ms deadline.
+        # Responses after the fixed 1.15-second deadline are excluded.
         row = self.run_trial(1, [("space", 1.175)])
         self.assertEqual(row['accuracy'], 0)
         self.assertIsNone(row['rt_ms'])
@@ -304,7 +318,8 @@ class TrialTests(unittest.TestCase):
                  patch.object(task, 'sart_countdown'), patch.object(task, 'sart_block', side_effect=run_block), \
                  redirect_stdout(io.StringIO()), self.assertRaisesRegex(RuntimeError, 'simulated display error'):
                 task.sart(path=root, part_info=INFO)
-            self.assertEqual(len(read_table(root, 'trials.csv')), 1)
+            raw_path = next((root / 'raw').glob('*.csv'))
+            self.assertEqual(len(read_table(root, raw_path.relative_to(root))), 1)
             self.assertEqual(read_table(root, 'summary.csv')[0]['status'], 'ERROR')
             window.close.assert_called_once()
 
