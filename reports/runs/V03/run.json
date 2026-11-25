@@ -1,0 +1,54 @@
+{
+ "run_id": "V03",
+ "purpose": "Null calibration + sensitivity of all 19 stored pipelines on synthetic data (leave-one-block-out)",
+ "command": "python v03_synthetic_leakage.py 20 5",
+ "started_utc": "2026-11-25T16:41:15+00:00",
+ "git_commit": "ad39d1d7f4b06b74f013224556c303ecd2f66d21",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "scipy": "1.18.1",
+  "sklearn": "1.9.1",
+  "pandas": "3.1.1",
+  "pyriemann": "0.12",
+  "matplotlib": "3.11.2"
+ },
+ "inputs": [
+  "rgb-ml-analysis/code/rgb_pipeline.py",
+  "rgb-eeg-lab/scripts/protocol.py",
+  "research/validation/_synth.py"
+ ],
+ "outputs": [
+  "reports/runs/V03/scores.csv",
+  "reports/runs/V03/summary.csv",
+  "reports/figures/V03_null_calibration.png"
+ ],
+ "shapes": {
+  "scores": [
+   431,
+   5
+  ]
+ },
+ "metrics": {
+  "null_grand_mean_bacc": 0.3397,
+  "null_max_pipeline_mean": 0.3469,
+  "null_pipeline_with_max_mean": "F2a ERP(O1,O2)+sLDA",
+  "n_pipelines_null_mean_t_gt_3": 0
+ },
+ "notes": [
+  "R_NULL=20, R_SIG=5, skip_slow=False; synthetic data only, distinct schedules per session",
+  "file_sha256 computed after the run finished; these files were not modified between run start and hashing. _runlog.py was extended (hash logging) while the run was in progress; this only affects metadata."
+ ],
+ "raw_eeg_used": false,
+ "finished_utc": "2026-11-25T16:53:13+00:00",
+ "duration_sec": 717.76,
+ "file_sha256": {
+  "research/validation/v03_synthetic_leakage.py": "fdb9562cad65d6257620b181d6c6a281ff6a4c05fe7451ea9655a26990633ca7",
+  "research/validation/_synth.py": "f1f1a213b8674b0097e40da95ec10a4a5db708f7b1a145ba4a85965c74916919",
+  "rgb-ml-analysis/code/rgb_pipeline.py": "c64b1cc6f610521bf346e4630b67276733aea0847c5abe11905e3ea0381e1536",
+  "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
+  "rgb-eeg-lab/config/protocol.json": "c7e5cacb63a13ae12a7201e49469d766b03c19cbac7a3c283910007f81900c4f"
+ }
+}

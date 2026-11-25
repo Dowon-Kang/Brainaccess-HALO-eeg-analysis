@@ -1,0 +1,7 @@
+                          structure  n_trials  n_groups  position_oracle_bacc
+                               P001       360        10                1.0000
+       P002 (1125 = session-1 seed)       540        15                1.0000
+       P002 (1125 = session-2 seed)       540        15                0.5574
+                               P003       348        10                0.9340
+                                P08       180         5                0.3333
+control: 3 sessions, distinct seeds       540        15                0.3037

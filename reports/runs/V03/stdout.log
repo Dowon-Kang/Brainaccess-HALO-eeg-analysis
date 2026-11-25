@@ -1,0 +1,39 @@
+condition                    pipeline  count   mean    std    min    max  t_vs_1/3
+     null        F1 ERP+sLDA +augment     20 0.3387 0.0221 0.2833 0.3722    1.0856
+     null F2a ERP(4ch)+LDA(no shrink)     20 0.3432 0.0252 0.3056 0.3870    1.7552
+     null           F2a ERP(4ch)+sLDA     20 0.3454 0.0205 0.3093 0.3815    2.6267
+     null         F2a ERP(O1,O2)+sLDA     20 0.3469 0.0284 0.2889 0.3981    2.1255
+     null          F2b BandPower+sLDA     20 0.3380 0.0333 0.2463 0.3759    0.6222
+     null             F2c xDAWN-TS+LR     20 0.3416 0.0243 0.2926 0.3889    1.5144
+     null     F2d sustained Cov-TS+LR     20 0.3315 0.0263 0.2981 0.3944   -0.3147
+     null         F3a ERP+MI-k20+sLDA     20 0.3417 0.0173 0.3093 0.3833    2.1550
+     null          F3b ERP+RFE20+sLDA     20 0.3451 0.0261 0.2907 0.3833    2.0148
+     null          F3c ERP+PCA10+sLDA     20 0.3332 0.0235 0.2907 0.3852   -0.0176
+     null          F4a ERP+SVM-linear     20 0.3377 0.0243 0.2852 0.3889    0.7993
+     null             F4b ERP+SVM-RBF     20 0.3310 0.0234 0.2870 0.3796   -0.4425
+     null           F4c xDAWN-cov+MDM     20 0.3336 0.0205 0.3019 0.3722    0.0606
+     null    F6 nested-tuned ERP+sLDA      3 0.3444 0.0121 0.3315 0.3556    1.5848
+     null       F7 EA + ERP(4ch)+sLDA     20 0.3427 0.0253 0.3000 0.3870    1.6548
+     null         F7 EA + xDAWN-TS+LR     20 0.3411 0.0277 0.2815 0.3796    1.2554
+     null  F8a soft-voting(ERP,TS,BP)     20 0.3424 0.0278 0.2833 0.3944    1.4611
+     null     F8b stacking(ERP,TS,BP)     20 0.3408 0.0306 0.2593 0.3963    1.0977
+   signal        F1 ERP+sLDA +augment      5 0.3559 0.0108 0.3463 0.3741       NaN
+   signal F2a ERP(4ch)+LDA(no shrink)      5 0.3530 0.0171 0.3278 0.3759       NaN
+   signal           F2a ERP(4ch)+sLDA      5 0.3637 0.0151 0.3426 0.3815       NaN
+   signal         F2a ERP(O1,O2)+sLDA      5 0.3670 0.0249 0.3296 0.3907       NaN
+   signal          F2b BandPower+sLDA      5 0.3396 0.0322 0.3019 0.3796       NaN
+   signal             F2c xDAWN-TS+LR      5 0.3396 0.0283 0.2963 0.3704       NaN
+   signal     F2d sustained Cov-TS+LR      5 0.3404 0.0258 0.3093 0.3667       NaN
+   signal         F3a ERP+MI-k20+sLDA      5 0.3678 0.0242 0.3333 0.3981       NaN
+   signal          F3b ERP+RFE20+sLDA      5 0.3574 0.0194 0.3333 0.3852       NaN
+   signal          F3c ERP+PCA10+sLDA      5 0.3507 0.0081 0.3426 0.3611       NaN
+   signal          F4a ERP+SVM-linear      5 0.3667 0.0153 0.3500 0.3852       NaN
+   signal             F4b ERP+SVM-RBF      5 0.3622 0.0374 0.3370 0.4204       NaN
+   signal           F4c xDAWN-cov+MDM      5 0.3530 0.0202 0.3352 0.3759       NaN
+   signal    F6 nested-tuned ERP+sLDA      3 0.3623 0.0172 0.3481 0.3815       NaN
+   signal       F7 EA + ERP(4ch)+sLDA      5 0.3567 0.0154 0.3426 0.3796       NaN
+   signal         F7 EA + xDAWN-TS+LR      5 0.3426 0.0230 0.3074 0.3704       NaN
+   signal  F8a soft-voting(ERP,TS,BP)      5 0.3467 0.0366 0.2815 0.3685       NaN
+   signal     F8b stacking(ERP,TS,BP)      5 0.3511 0.0222 0.3315 0.3870       NaN
+
+iid binomial SD for n=540: 0.0203

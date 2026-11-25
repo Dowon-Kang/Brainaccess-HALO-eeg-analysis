@@ -1,0 +1,7 @@
+   condition            pipeline  count   mean    std     se  ci95_lo  ci95_hi  t_vs_1/3  p_two_sided
+        null   F2a ERP(4ch)+sLDA    200 0.3342 0.0225 0.0016   0.3311   0.3373    0.5421       0.5884
+        null F2a ERP(O1,O2)+sLDA    200 0.3349 0.0259 0.0018   0.3314   0.3385    0.8799       0.3800
+signal_1.5uV   F2a ERP(4ch)+sLDA     30 0.3451 0.0171 0.0031   0.3389   0.3512    3.7461       0.0008
+signal_1.5uV F2a ERP(O1,O2)+sLDA     30 0.3513 0.0240 0.0044   0.3427   0.3599    4.0947       0.0003
+signal_3.0uV   F2a ERP(4ch)+sLDA     30 0.3849 0.0270 0.0049   0.3753   0.3946   10.4850       0.0000
+signal_3.0uV F2a ERP(O1,O2)+sLDA     30 0.3936 0.0282 0.0051   0.3835   0.4037   11.7185       0.0000

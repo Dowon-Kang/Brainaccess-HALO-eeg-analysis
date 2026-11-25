@@ -1,0 +1,60 @@
+{
+ "run_id": "V03b",
+ "purpose": "Precise null bias + sensitivity of the two key ERP pipelines (synthetic, leave-one-block-out)",
+ "command": "python v03b_null_precision.py 200 30",
+ "started_utc": "2026-11-25T16:54:00+00:00",
+ "git_commit": "74c22d50c21020415360341e8384721d14811858",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "scipy": "1.18.1",
+  "sklearn": "1.9.1",
+  "pandas": "3.1.1",
+  "pyriemann": "0.12",
+  "matplotlib": "3.11.2"
+ },
+ "inputs": [
+  "rgb-ml-analysis/code/rgb_pipeline.py",
+  "rgb-eeg-lab/scripts/protocol.py",
+  "research/validation/_synth.py"
+ ],
+ "outputs": [
+  "reports/runs/V03b/scores.csv",
+  "reports/runs/V03b/summary.csv"
+ ],
+ "shapes": {
+  "scores": [
+   520,
+   4
+  ]
+ },
+ "metrics": {
+  "null|F2a ERP(4ch)+sLDA|mean": 0.3342,
+  "null|F2a ERP(4ch)+sLDA|p_vs_1/3": 0.5884,
+  "null|F2a ERP(O1,O2)+sLDA|mean": 0.3349,
+  "null|F2a ERP(O1,O2)+sLDA|p_vs_1/3": 0.38,
+  "signal_1.5uV|F2a ERP(4ch)+sLDA|mean": 0.3451,
+  "signal_1.5uV|F2a ERP(4ch)+sLDA|p_vs_1/3": 0.0008,
+  "signal_1.5uV|F2a ERP(O1,O2)+sLDA|mean": 0.3513,
+  "signal_1.5uV|F2a ERP(O1,O2)+sLDA|p_vs_1/3": 0.0003,
+  "signal_3.0uV|F2a ERP(4ch)+sLDA|mean": 0.3849,
+  "signal_3.0uV|F2a ERP(4ch)+sLDA|p_vs_1/3": 0.0,
+  "signal_3.0uV|F2a ERP(O1,O2)+sLDA|mean": 0.3936,
+  "signal_3.0uV|F2a ERP(O1,O2)+sLDA|p_vs_1/3": 0.0
+ },
+ "notes": [
+  "R_NULL=200, R_SIG=30; seeds 50_000+rep (null), 60_000/70_000+rep (signal) — disjoint from V-03"
+ ],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/v03b_null_precision.py": "39203b9b6fc19a1c01073ba38a274ee8c75a0e38732a7d93a679a875492757de",
+  "research/validation/_runlog.py": "682dd7eca34194a4fa3792e7d9ce2267954fbcf5fc36feb46a678cbff275b4cd",
+  "rgb-ml-analysis/code/rgb_pipeline.py": "c64b1cc6f610521bf346e4630b67276733aea0847c5abe11905e3ea0381e1536",
+  "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
+  "research/validation/_synth.py": "f1f1a213b8674b0097e40da95ec10a4a5db708f7b1a145ba4a85965c74916919"
+ },
+ "finished_utc": "2026-11-25T16:56:08+00:00",
+ "duration_sec": 128.87
+}

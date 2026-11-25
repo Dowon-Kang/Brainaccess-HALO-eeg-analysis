@@ -1,0 +1,43 @@
+=== A. schedules reconstructed from session-1 seeds (seed = base + participant number)
+ participant_number     seed  n_sequences                         first_block  p_same_as_prev
+                  1 20261027           90 R G B G R G B G R B B G B G R B R R        0.223529
+                  2 20261028           90 R B G G B B G R B B R R G G R G R B        0.247059
+                  3 20261029           90 G R R G B B G R G B R R B R G G B B        0.188235
+                  8 20261034           90 R G G B R B G R B G R B B R B G G R        0.211765
+population P(current == previous) within block = 0.2060 (unconstrained shuffle: 0.2941)
+balanced-accuracy ceiling of a previous-colour-only decoder = 0.3935
+
+=== B. twin schedules x drift x CV grouping (no colour signal)
+ schedule  drift_amp    grouping  count   mean    std  t_vs_1/3  p_one_sided
+ distinct        0.0       block     30 0.3383 0.0262    1.0338       0.1549
+ distinct        0.0 block_index     30 0.3333 0.0224    0.0000       0.5000
+ distinct        0.0     session     30 0.3293 0.0267   -0.8223       0.7912
+ distinct        0.5       block     30 0.3330 0.0290   -0.0700       0.5277
+ distinct        0.5 block_index     30 0.3302 0.0279   -0.6053       0.7251
+ distinct        0.5     session     30 0.3362 0.0301    0.5167       0.3046
+ distinct        1.0       block     30 0.3291 0.0178   -1.2934       0.8970
+ distinct        1.0 block_index     30 0.3296 0.0175   -1.1801       0.8762
+ distinct        1.0     session     30 0.3319 0.0221   -0.3664       0.6416
+identical        0.0       block     30 0.3280 0.0274   -1.0747       0.8543
+identical        0.0 block_index     30 0.3290 0.0293   -0.8085       0.7873
+identical        0.0     session     30 0.3270 0.0242   -1.4241       0.9175
+identical        0.5       block     30 0.3310 0.0161   -0.7789       0.7788
+identical        0.5 block_index     30 0.3336 0.0194    0.0695       0.4725
+identical        0.5     session     30 0.3287 0.0204   -1.2412       0.8878
+identical        1.0       block     30 0.3338 0.0225    0.1201       0.4526
+identical        1.0 block_index     30 0.3348 0.0177    0.4587       0.3249
+identical        1.0     session     30 0.3318 0.0252   -0.3348       0.6299
+
+=== C. permutation-null calibration under identical schedules (20 reps x 100 perms)
+ drift_amp                null_kind  n  fpr_at_05  mean_p  mean_null_sd  mean_observed
+       0.0 sequence_shared_schedule 20       0.05  0.4673        0.0243         0.3372
+       0.0    sequence_within_block 20       0.10  0.4594        0.0253         0.3372
+       0.0       trial_within_block 20       0.00  0.4698        0.0250         0.3372
+       1.0 sequence_shared_schedule 20       0.00  0.5173        0.0250         0.3315
+       1.0    sequence_within_block 20       0.00  0.5223        0.0246         0.3315
+       1.0       trial_within_block 20       0.00  0.5505        0.0251         0.3315
+
+=== D. previous-colour carry-over only (no current-colour signal), 30 reps
+ carry_uv  count   mean    std  t_vs_1/3
+      0.0     30 0.3348 0.0279    0.2907
+      2.0     30 0.3388 0.0222    1.3536

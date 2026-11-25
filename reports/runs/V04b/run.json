@@ -1,0 +1,42 @@
+{
+ "run_id": "V04b",
+ "purpose": "History-only predictability of colour under the 6/6/6, max-run-2 block design",
+ "command": "python v04b_sequence_predictability.py 20000",
+ "started_utc": "2026-11-25T17:04:46+00:00",
+ "git_commit": "74c22d50c21020415360341e8384721d14811858",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "pandas": "3.1.1"
+ },
+ "inputs": [
+  "rgb-eeg-lab/scripts/protocol.py",
+  "rgb-eeg-lab/config/protocol.json",
+  "research/validation/_synth.py"
+ ],
+ "outputs": [
+  "reports/runs/V04b/decoders.csv",
+  "reports/runs/V04b/per_position.csv"
+ ],
+ "shapes": {},
+ "metrics": {
+  "acc[prev-only]": 0.3941,
+  "acc[counts]": 0.505,
+  "acc[counts+run]": 0.5137
+ },
+ "notes": [
+  "Accuracy of a decoder that only knows earlier colours of the same block; balanced accuracy equals accuracy by symmetry of the design."
+ ],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/v04b_sequence_predictability.py": "ec9ddb068a2db9b1cbce0092b11c2c80494352a81b935b1b730ec1d727ef4138",
+  "research/validation/_runlog.py": "682dd7eca34194a4fa3792e7d9ce2267954fbcf5fc36feb46a678cbff275b4cd",
+  "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
+  "rgb-eeg-lab/config/protocol.json": "c7e5cacb63a13ae12a7201e49469d766b03c19cbac7a3c283910007f81900c4f",
+  "research/validation/_synth.py": "f1f1a213b8674b0097e40da95ec10a4a5db708f7b1a145ba4a85965c74916919"
+ },
+ "finished_utc": "2026-11-25T17:04:50+00:00",
+ "duration_sec": 3.88
+}

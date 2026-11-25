@@ -1,0 +1,4 @@
+decoder,accuracy,se
+prev-only,0.39406,0.00081
+counts,0.50501,0.00083
+counts+run,0.5137,0.00083
