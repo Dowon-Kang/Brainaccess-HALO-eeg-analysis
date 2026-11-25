@@ -1,0 +1,173 @@
+{
+  "_README": "연구 설정의 유일한 출처. 출처: 2026-10-26 연구계획서 + 11_실험운영지침_사전분석계획.docx v2.0. null = 현장 실측 전(모니터 폭·해상도, EEG 단위). null이 남으면 본측정·본분석은 차단된다.",
+  "plan_version": "2026-10-26 v2.0",
+  "stimulus": {
+    "shape": "center_square",
+    "square_deg": 10.0,
+    "square_cm": 10.5,
+    "colors_rgb255": {
+      "R": [
+        157,
+        0,
+        0
+      ],
+      "G": [
+        0,
+        89,
+        0
+      ],
+      "B": [
+        0,
+        0,
+        255
+      ]
+    },
+    "gray_rgb255": [
+      76,
+      76,
+      76
+    ],
+    "color_mode": "sRGB",
+    "phase_sec": 3.0,
+    "_unconfirmed": "fixation(+)과 상상 cue(작은 원)는 계획서에 명시 없음 — 팀 확인 필요",
+    "fixation": true,
+    "imagine_cue": "circle"
+  },
+  "monitor": {
+    "width_cm": 70.8,
+    "resolution_px": [
+      1920,
+      1080
+    ],
+    "distance_cm": 60,
+    "min_refresh_hz": 60,
+    "brightness": "50%",
+    "warmup_min": 20
+  },
+  "seed": {
+    "base": 20261026,
+    "_rule": "seed = base + 참가자 순번 (P03 → 20261029)",
+    "practice_offset": 100000,
+    "_practice_note": "연습용 seed는 별도라는 계획만 있음. offset 100000은 구현 관례 — 팀 확인"
+  },
+  "design": {
+    "blocks": 5,
+    "per_color_per_block": 6,
+    "rest_sec": 120,
+    "max_same_color_run": 2,
+    "_max_run_note": "같은 색 최대 연속 2는 구현 관례(계획서 미기재) — 팀 확인"
+  },
+  "eeg": {
+    "device": "BrainAccess HALO",
+    "channels": [
+      "Fp1",
+      "Fp2",
+      "O1",
+      "O2"
+    ],
+    "occipital": [
+      "O1",
+      "O2"
+    ],
+    "fs": 250,
+    "reference": "device default (변경 없음)",
+    "raw_unit": "uV"
+  },
+  "analysis": {
+    "filter": {
+      "type": "butterworth_sos",
+      "l_freq": 1.0,
+      "h_freq": 30.0,
+      "order": 4,
+      "causal": true
+    },
+    "per_segment_reset": true,
+    "startup_exclude_sec": 5.0,
+    "notch": false,
+    "ica": false,
+    "car": false,
+    "epoch_sec": [
+      -1.0,
+      2.0
+    ],
+    "baseline_sec": [
+      -1.8,
+      -1.0
+    ],
+    "tfr_pad_sec": [
+      -2.5,
+      2.5
+    ],
+    "freq_range": [
+      3,
+      30
+    ],
+    "freq_step": 1,
+    "n_cycles": 3,
+    "_bins_note": "모든 구간은 [lo, hi) 반열린 구간, 마지막 구간만 [lo, hi] 닫힘",
+    "bands_hz": [
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        8,
+        13
+      ],
+      [
+        13,
+        30
+      ]
+    ],
+    "windows_sec": [
+      [
+        0.1,
+        0.4
+      ],
+      [
+        0.4,
+        0.8
+      ],
+      [
+        0.8,
+        1.2
+      ],
+      [
+        1.2,
+        1.5
+      ]
+    ]
+  },
+  "qc": {
+    "prestim_demean_sec": [
+      -1.0,
+      0.0
+    ],
+    "abs_uv": 60.0,
+    "ptp_uv": 120.0,
+    "flat_std_uv": 0.5,
+    "flat_window_sec": 1.0,
+    "missing_sample": "any",
+    "baseline_check": true
+  },
+  "svm": {
+    "C": [
+      0.1,
+      1,
+      10
+    ],
+    "gamma": [
+      0.01,
+      0.1,
+      1
+    ],
+    "class_weight": "balanced",
+    "n_boot": 10000,
+    "chance_ba": 0.3333,
+    "loso_min_subjects": 4
+  }
+}

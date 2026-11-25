@@ -1,0 +1,82 @@
+{
+  "role": "analysis",
+  "host": "DESKTOP-CFL7VMR",
+  "executable": "C:\\braineeg\\Experiment\\rgb-eeg-lab-v4\\rgb-eeg-lab\\.venv\\Scripts\\python.exe",
+  "python": "3.10.11",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "mne": "1.12.1",
+    "sklearn": "1.7.2",
+    "pyxdf": "1.18.0",
+    "pylsl": "1.18.6",
+    "matplotlib": "3.10.9",
+    "pytest": "9.2.0",
+    "liblsl": 118
+  },
+  "checks": [
+    {
+      "check": "인터프리터",
+      "status": "PASS",
+      "evidence": "C:\\braineeg\\Experiment\\rgb-eeg-lab-v4\\rgb-eeg-lab\\.venv\\Scripts\\python.exe | Python 3.10.11 64bit | Windows-10-10.0.19045-SP0"
+    },
+    {
+      "check": "Python 버전(분석)",
+      "status": "PASS",
+      "evidence": "3.10 (≥3.10)"
+    },
+    {
+      "check": "import numpy",
+      "status": "PASS",
+      "evidence": "2.2.6"
+    },
+    {
+      "check": "import scipy",
+      "status": "PASS",
+      "evidence": "1.15.3"
+    },
+    {
+      "check": "import mne",
+      "status": "PASS",
+      "evidence": "1.12.1"
+    },
+    {
+      "check": "import sklearn",
+      "status": "PASS",
+      "evidence": "1.7.2"
+    },
+    {
+      "check": "import pyxdf",
+      "status": "PASS",
+      "evidence": "1.18.0"
+    },
+    {
+      "check": "import pylsl",
+      "status": "PASS",
+      "evidence": "1.18.6"
+    },
+    {
+      "check": "import matplotlib",
+      "status": "PASS",
+      "evidence": "3.10.9"
+    },
+    {
+      "check": "import pytest",
+      "status": "PASS",
+      "evidence": "9.2.0"
+    },
+    {
+      "check": "liblsl",
+      "status": "PASS",
+      "evidence": "118"
+    },
+    {
+      "check": "LSL 루프백",
+      "status": "PASS",
+      "evidence": "수신 ['ping'], timestamp 696268.985817"
+    }
+  ],
+  "verdict": "GO",
+  "recorded": "2026-11-03T16:32:02"
+}

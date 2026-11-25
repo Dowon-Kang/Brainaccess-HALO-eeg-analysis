@@ -1,0 +1,9 @@
+# 자극용 환경 (stim_rgb.py) — PsychoPy가 들어 있는 바로 그 인터프리터에 설치한다.
+#
+# 권장: PsychoPy Standalone (psychopy는 Standalone에 포함, 여기서는 pylsl만 추가)
+#   & "C:\Program Files\PsychoPy\python.exe" -m pip install -r requirements-stim.txt
+# 대안: Python 3.10 가상환경 + pip psychopy (아래 주석 해제)
+#   py -3.10 -m venv .venv-stim ; .venv-stim\Scripts\python.exe -m pip install -r requirements-stim.txt
+# psychopy
+pylsl>=1.16,<2
+# 설치 후 반드시: <그 python> scripts\env_check.py --role stim --lock

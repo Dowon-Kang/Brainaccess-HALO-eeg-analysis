@@ -1,0 +1,80 @@
+{
+ "saved": "2026-11-22",
+ "source": "data/sub-P003_ses-main_run-05.xdf (2026-11-21 녹화)",
+ "board_version": "3.0.0",
+ "firmware": "3.6.0 / hardware 2.0.0 (Board 로그)",
+ "name": "BA HALO 114_HALO_BrainAccess",
+ "type": "EEG",
+ "source_id": "BA HALO 114",
+ "hostname": "DESKTOP-CFL7VMR",
+ "nominal_srate": 250.0,
+ "channel_format": "float32",
+ "channel_count": 11,
+ "channels": [
+  {
+   "label": "O1",
+   "unit": "microvolts",
+   "type": "EEG"
+  },
+  {
+   "label": "O2",
+   "unit": "microvolts",
+   "type": "EEG"
+  },
+  {
+   "label": "Fp2",
+   "unit": "microvolts",
+   "type": "EEG"
+  },
+  {
+   "label": "Fp1",
+   "unit": "microvolts",
+   "type": "EEG"
+  },
+  {
+   "label": "contact_O1",
+   "unit": "value",
+   "type": "contact"
+  },
+  {
+   "label": "contact_O2",
+   "unit": "value",
+   "type": "contact"
+  },
+  {
+   "label": "contact_Fp2",
+   "unit": "value",
+   "type": "contact"
+  },
+  {
+   "label": "contact_Fp1",
+   "unit": "value",
+   "type": "contact"
+  },
+  {
+   "label": "Sample",
+   "unit": "value",
+   "type": "Sample"
+  },
+  {
+   "label": "Streaming",
+   "unit": "value",
+   "type": "misc"
+  },
+  {
+   "label": "Battery",
+   "unit": "pct",
+   "type": "Battery"
+  }
+ ],
+ "manufacturer": "Neurotechnology",
+ "model": "HALO",
+ "measured_srate": 250.002,
+ "raw_eeg_sd_uV": [
+  14525.4,
+  14287.8,
+  7945.4,
+  15971.1
+ ],
+ "labrecorder_required": "BA HALO 114_HALO_BrainAccess (DESKTOP-CFL7VMR)"
+}

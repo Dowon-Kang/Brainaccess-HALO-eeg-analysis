@@ -1,0 +1,4 @@
+# 환경이 둘로 나뉜다:
+#   분석: requirements-analysis.txt
+#   자극: requirements-stim.txt (PsychoPy Standalone 내장 python에 설치)
+-r requirements-analysis.txt

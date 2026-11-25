@@ -1,0 +1,188 @@
+{
+  "_README": "연구 설정의 유일한 출처. 출처: 2026-10-26 연구계획서 + 11_실험운영지침_사전분석계획.docx v2.0. null = 현장 실측 전(모니터 폭·해상도, EEG 단위). null이 남으면 본측정·본분석은 차단된다.",
+  "plan_version": "2026-10-26 v2.0 + 변경1(2026-11-13)",
+  "stimulus": {
+    "shape": "center_square",
+    "square_deg": 10.0,
+    "square_cm": 10.5,
+    "colors_rgb255": {
+      "R": [
+        157,
+        0,
+        0
+      ],
+      "G": [
+        0,
+        89,
+        0
+      ],
+      "B": [
+        0,
+        0,
+        255
+      ]
+    },
+    "gray_rgb255": [
+      76,
+      76,
+      76
+    ],
+    "color_mode": "sRGB",
+    "phase_sec": 3.0,
+    "_unconfirmed": "fixation(+)과 상상 cue(작은 원)는 계획서에 명시 없음 — 팀 확인 필요",
+    "fixation": true,
+    "imagine_cue": "circle"
+  },
+  "monitor": {
+    "width_cm": 70.8,
+    "resolution_px": [
+      1920,
+      1080
+    ],
+    "distance_cm": 60,
+    "min_refresh_hz": 60,
+    "brightness": "50%",
+    "warmup_min": 20
+  },
+  "seed": {
+    "base": 20261026,
+    "_rule": "seed = base + 참가자 순번 (P03 → 20261029)",
+    "practice_offset": 100000,
+    "_practice_note": "연습용 seed는 별도라는 계획만 있음. offset 100000은 구현 관례 — 팀 확인",
+    "session_offset": 1000,
+    "_session_note": "변경3(2026-11-24): seed = base + 참가자 번호 + session_offset × (세션 − 1). 같은 참가자 반복 세션마다 다른 순서. 세션 1 = 기존 seed와 동일. 1000은 참가자 번호(<1000)와 겹치지 않게 고른 구현값"
+  },
+  "design": {
+    "blocks": 5,
+    "per_color_per_block": 6,
+    "phases": [
+      "gray",
+      "obs",
+      "gray",
+      "obs",
+      "gray",
+      "img"
+    ],
+    "_phases_note": "시퀀스 단계 순서(각 phase_sec). 변경1(2026-11-13): v2.0의 gray obs gray obs gray img gray img(24s)에서 상상만 1회로 축소(18s) — 집중도 저하. 사유는 docs/plan_changes.md",
+    "rest_sec": 30,
+    "max_same_color_run": 2,
+    "_max_run_note": "같은 색 최대 연속 2는 구현 관례(계획서 미기재) — 팀 확인"
+  },
+  "eeg": {
+    "device": "BrainAccess HALO",
+    "channels": [
+      "Fp1",
+      "Fp2",
+      "O1",
+      "O2"
+    ],
+    "occipital": [
+      "O1",
+      "O2"
+    ],
+    "fs": 250,
+    "reference": "device default (변경 없음)",
+    "raw_unit": "uV"
+  },
+  "analysis": {
+    "filter": {
+      "type": "butterworth_sos",
+      "l_freq": 1.0,
+      "h_freq": 30.0,
+      "order": 4,
+      "causal": true
+    },
+    "per_segment_reset": true,
+    "startup_exclude_sec": 5.0,
+    "notch": false,
+    "ica": false,
+    "car": false,
+    "epoch_sec": [
+      -1.0,
+      2.0
+    ],
+    "baseline_sec": [
+      -1.8,
+      -1.0
+    ],
+    "tfr_pad_sec": [
+      -2.5,
+      2.5
+    ],
+    "freq_range": [
+      3,
+      30
+    ],
+    "freq_step": 1,
+    "n_cycles": 3,
+    "_bins_note": "모든 구간은 [lo, hi) 반열린 구간, 마지막 구간만 [lo, hi] 닫힘",
+    "bands_hz": [
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        8,
+        13
+      ],
+      [
+        13,
+        30
+      ]
+    ],
+    "windows_sec": [
+      [
+        0.1,
+        0.4
+      ],
+      [
+        0.4,
+        0.8
+      ],
+      [
+        0.8,
+        1.2
+      ],
+      [
+        1.2,
+        1.5
+      ]
+    ]
+  },
+  "qc": {
+    "prestim_demean_sec": [
+      -1.0,
+      0.0
+    ],
+    "abs_uv": 60.0,
+    "ptp_uv": 120.0,
+    "flat_std_uv": 0.5,
+    "flat_window_sec": 1.0,
+    "missing_sample": "any",
+    "baseline_check": true,
+    "precheck_min_valid_pct": 70.0,
+    "precheck_min_battery_pct": 50.0,
+    "_battery_note": "시작 전 HALO 배터리 하한(LSL 'Battery' 채널, %). 운영 기준·Claude 제안값(사용자 확인 필요): 소모 약 0.37%p/분 → 본측정+점검 약 13%p, P003 2026-11-21 run-08은 25%로 시작해 21%에서 EEG 끊김",
+    "_precheck_note": "세션 시작 전 eeg_precheck.py(--once 60) 4채널 기준 유효 창 % 하한. 미만이면 전극 재조정 후 재점검. 운영 기준이며 분석 제외 기준 아님 (2026-11-21 추가, docs/plan_changes.md 변경2)"
+  },
+  "svm": {
+    "C": [
+      0.1,
+      1,
+      10
+    ],
+    "gamma": [
+      0.01,
+      0.1,
+      1
+    ],
+    "class_weight": "balanced",
+    "n_boot": 10000,
+    "chance_ba": 0.3333,
+    "loso_min_subjects": 4
+  }
+}
