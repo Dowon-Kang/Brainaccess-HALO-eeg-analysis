@@ -1,0 +1,5 @@
+held_out,selected_on_others,others_mean,held_out_score,held_out_baseline,held_out_null95,held_out_null_mean,exceeds_null95
+P002,ERP O1·O2만 + sLDA,37.867,44.7,41.3,37.1,32.9,True
+P003,ERP O1·O2만 + sLDA,39.633,39.4,35.6,38.7,32.9,True
+P08,ERP O1·O2만 + sLDA,40.767,36.0,25.1,41.2,32.6,False
+P001,ERP O1·O2만 + sLDA,40.033,38.2,33.2,41.8,32.1,False

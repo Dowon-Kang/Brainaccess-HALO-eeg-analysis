@@ -1,0 +1,5 @@
+,best_of_19,best_pipeline,baseline,best_minus_baseline_pp,null_mean,null_sd,best_z_vs_nullmean,E[max of 19 indep. nulls]_pp
+P002,44.7,ERP O1·O2만 + sLDA,41.3,3.4,32.9,2.553,4.621,37.608
+P003,41.8,EA + ERP 4채널,35.6,6.2,32.9,3.526,2.524,39.401
+P08,36.0,ERP O1·O2만 + sLDA,25.1,10.9,32.6,5.228,0.65,42.24
+P001,38.8,리만 MDM,33.2,5.6,32.1,5.897,1.136,42.973

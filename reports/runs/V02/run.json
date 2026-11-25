@@ -1,0 +1,35 @@
+{
+ "run_id": "V02",
+ "purpose": "Nominal sRGB luminance / chromaticity / cone contrast of RGB stimuli and grey background",
+ "command": "python research/validation/v02_stimulus_luminance.py",
+ "started_utc": "2026-11-25T16:49:54+00:00",
+ "git_commit": "ad39d1d7f4b06b74f013224556c303ecd2f66d21",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "pandas": "3.1.1"
+ },
+ "inputs": [
+  "rgb-eeg-lab/config/protocol.json"
+ ],
+ "outputs": [
+  "reports/runs/V02/stimulus_photometry.csv"
+ ],
+ "shapes": {},
+ "metrics": {
+  "max_abs_michelson_vs_grey": 0.0058
+ },
+ "notes": [
+  "Nominal iso-luminance holds only for an ideal sRGB display; physical luminance never measured (UNKNOWN)."
+ ],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/v02_stimulus_luminance.py": "0b7350e434d361a6f7410cefe7f5ee80779b525db19b01c08289ab7ca2bcf1e5",
+  "research/validation/_runlog.py": "682dd7eca34194a4fa3792e7d9ce2267954fbcf5fc36feb46a678cbff275b4cd",
+  "rgb-eeg-lab/config/protocol.json": "c7e5cacb63a13ae12a7201e49469d766b03c19cbac7a3c283910007f81900c4f"
+ },
+ "finished_utc": "2026-11-25T16:49:54+00:00",
+ "duration_sec": 0.01
+}

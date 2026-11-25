@@ -1,0 +1,61 @@
+[PASS] methods.mean == unweighted mean of 4 subjects: max |diff| = 0.000 pp
+[PASS] methods.delta_pp == mean - baseline mean: baseline mean = 33.8 %, max |diff| = 0.000
+[PASS] 19 pipelines listed: n rows = 19
+[PASS] subjects.trials == sum(kept of used sessions) [P002]: sessions.csv 533 vs subjects.csv 533
+[PASS] subjects.trials == sum(kept of used sessions) [P003]: sessions.csv 243 vs subjects.csv 243
+[PASS] subjects.trials == sum(kept of used sessions) [P08]: sessions.csv 136 vs subjects.csv 136
+[PASS] subjects.trials == sum(kept of used sessions) [P001]: sessions.csv 83 vs subjects.csv 83
+[PASS] sessions.keep_pct consistent with kept/total (±1 pp; stored values are rounded to whole %): max |diff| = 0.44 pp
+[PASS] p_bonf == min(1, 19 p) [P002]: p=0.001, n_perm=1000.0, 19p=0.0190, stored=0.019
+[PASS] p >= 1/(n_perm+1) [P002]: min attainable p = 0.0010
+[PASS] p_bonf == min(1, 19 p) [P003]: p=0.038, n_perm=1000.0, 19p=0.7220, stored=0.721
+[PASS] p >= 1/(n_perm+1) [P003]: min attainable p = 0.0010
+[PASS] p_bonf == min(1, 19 p) [P08]: p=0.2786, n_perm=200.0, 19p=5.2934, stored=1.0
+[PASS] p >= 1/(n_perm+1) [P08]: min attainable p = 0.0050
+[PASS] p_bonf == min(1, 19 p) [P001]: p=0.1443, n_perm=200.0, 19p=2.7417, stored=1.0
+[PASS] p >= 1/(n_perm+1) [P001]: min attainable p = 0.0050
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P002, ERP O1·O2 + sLDA]: recomputed 40.87 vs stored 40.9
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P002, EA + ERP 4채널]: recomputed 40.87 vs stored 40.9
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P003, ERP O1·O2 + sLDA]: recomputed 41.38 vs stored 41.4
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P003, EA + ERP 4채널]: recomputed 41.38 vs stored 41.4
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P08, ERP O1·O2 + sLDA]: recomputed 43.33 vs stored 43.3
+[PASS] controls.chance95 == binom.ppf(.95,n,1/3)/n [P08, EA + ERP 4채널]: recomputed 43.33 vs stored 43.3
+[PASS] generalization block-wise == methods [P002, ERP O1·O2]: 44.7 vs 44.7
+[PASS] generalization block-wise == methods [P002, ERP 4채널]: 41.3 vs 41.3
+[PASS] generalization block-wise == methods [P003, ERP O1·O2]: 39.4 vs 39.4
+[PASS] generalization block-wise == methods [P003, ERP 4채널]: 35.6 vs 35.6
+[PASS] subjects.bacc == methods best pipeline [P002]: 44.7
+[PASS] subjects.bacc == methods best pipeline [P003]: 39.4
+
+Implied permutation-null SD per subject (normal approx. from null95):
+          trials  null_mean  null95  n_perm  null_sd_implied  binomial_sd_iid  sd_ratio_perm_over_iid
+subject                                                                                             
+P002        533       32.9    37.1    1000             2.55             2.04                    1.25
+P003        243       32.9    38.7    1000             3.53             3.02                    1.17
+P08         136       32.6    41.2     200             5.23             4.04                    1.29
+P001         83       32.1    41.8     200             5.90             5.17                    1.14
+
+E[max of 19 independent N(0,1)] = 1.844
+      best_of_19      best_pipeline  baseline  best_minus_baseline_pp  null_mean  null_sd  best_z_vs_nullmean  E[max of 19 indep. nulls]_pp
+P002        44.7  ERP O1·O2만 + sLDA      41.3                     3.4       32.9     2.55                4.62                         37.61
+P003        41.8       EA + ERP 4채널      35.6                     6.2       32.9     3.53                2.52                         39.40
+P08         36.0  ERP O1·O2만 + sLDA      25.1                    10.9       32.6     5.23                0.65                         42.24
+P001        38.8             리만 MDM      33.2                     5.6       32.1     5.90                1.14                         42.97
+
+Leave-one-subject-out pipeline selection:
+   held_out selected_on_others  others_mean  held_out_score  held_out_baseline  held_out_null95  held_out_null_mean  exceeds_null95
+0     P002  ERP O1·O2만 + sLDA        37.87            44.7               41.3             37.1                32.9            True
+1     P003  ERP O1·O2만 + sLDA        39.63            39.4               35.6             38.7                32.9            True
+2      P08  ERP O1·O2만 + sLDA        40.77            36.0               25.1             41.2                32.6           False
+3     P001  ERP O1·O2만 + sLDA        40.03            38.2               33.2             41.8                32.1           False
+mean held-out score of LOSubjO-selected pipelines = 39.58 % (vs in-sample best-mean pipeline 39.58 %)
+
+Kendall's W across 4 subjects (19 pipelines) = 0.409, chi2(18) = 29.46, p = 0.043
+Pairwise Spearman rho of pipeline scores:
+       P002  P003   P08  P001
+P002  1.00  0.52 -0.00  0.52
+P003  0.52  1.00  0.31  0.01
+P08  -0.00  0.31  1.00 -0.07
+P001  0.52  0.01 -0.07  1.00
+
+pipeline x subject cells above that subject's null95: 18 / 76 (5% expected under the null if independent = 3.8)

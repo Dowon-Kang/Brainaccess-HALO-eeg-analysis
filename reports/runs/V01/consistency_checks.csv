@@ -1,0 +1,29 @@
+check,status,detail
+methods.mean == unweighted mean of 4 subjects,PASS,max |diff| = 0.000 pp
+methods.delta_pp == mean - baseline mean,PASS,"baseline mean = 33.8 %, max |diff| = 0.000"
+19 pipelines listed,PASS,n rows = 19
+subjects.trials == sum(kept of used sessions) [P002],PASS,sessions.csv 533 vs subjects.csv 533
+subjects.trials == sum(kept of used sessions) [P003],PASS,sessions.csv 243 vs subjects.csv 243
+subjects.trials == sum(kept of used sessions) [P08],PASS,sessions.csv 136 vs subjects.csv 136
+subjects.trials == sum(kept of used sessions) [P001],PASS,sessions.csv 83 vs subjects.csv 83
+sessions.keep_pct consistent with kept/total (±1 pp; stored values are rounded to whole %),PASS,max |diff| = 0.44 pp
+"p_bonf == min(1, 19 p) [P002]",PASS,"p=0.001, n_perm=1000.0, 19p=0.0190, stored=0.019"
+p >= 1/(n_perm+1) [P002],PASS,min attainable p = 0.0010
+"p_bonf == min(1, 19 p) [P003]",PASS,"p=0.038, n_perm=1000.0, 19p=0.7220, stored=0.721"
+p >= 1/(n_perm+1) [P003],PASS,min attainable p = 0.0010
+"p_bonf == min(1, 19 p) [P08]",PASS,"p=0.2786, n_perm=200.0, 19p=5.2934, stored=1.0"
+p >= 1/(n_perm+1) [P08],PASS,min attainable p = 0.0050
+"p_bonf == min(1, 19 p) [P001]",PASS,"p=0.1443, n_perm=200.0, 19p=2.7417, stored=1.0"
+p >= 1/(n_perm+1) [P001],PASS,min attainable p = 0.0050
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P002, ERP O1·O2 + sLDA]",PASS,recomputed 40.87 vs stored 40.9
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P002, EA + ERP 4채널]",PASS,recomputed 40.87 vs stored 40.9
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P003, ERP O1·O2 + sLDA]",PASS,recomputed 41.38 vs stored 41.4
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P003, EA + ERP 4채널]",PASS,recomputed 41.38 vs stored 41.4
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P08, ERP O1·O2 + sLDA]",PASS,recomputed 43.33 vs stored 43.3
+"controls.chance95 == binom.ppf(.95,n,1/3)/n [P08, EA + ERP 4채널]",PASS,recomputed 43.33 vs stored 43.3
+"generalization block-wise == methods [P002, ERP O1·O2]",PASS,44.7 vs 44.7
+"generalization block-wise == methods [P002, ERP 4채널]",PASS,41.3 vs 41.3
+"generalization block-wise == methods [P003, ERP O1·O2]",PASS,39.4 vs 39.4
+"generalization block-wise == methods [P003, ERP 4채널]",PASS,35.6 vs 35.6
+subjects.bacc == methods best pipeline [P002],PASS,44.7
+subjects.bacc == methods best pipeline [P003],PASS,39.4
