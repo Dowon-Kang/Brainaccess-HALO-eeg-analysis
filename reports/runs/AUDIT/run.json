@@ -1,0 +1,36 @@
+{
+ "run_id": "AUDIT",
+ "purpose": "Independent read-only audit of rgb-ml-analysis / rgb-eeg-lab code and docs: 5 dimension auditors + 1 adversarial verifier per dimension",
+ "started_utc": "2026-11-25T16:33:42Z",
+ "finished_utc": "2026-11-25T17:14:11Z",
+ "duration_sec": 2429,
+ "audited_commit": "ad39d1d7f4b06b74f013224556c303ecd2f66d21",
+ "working_tree": "new untracked files under reports/ and research/ only; audited files unchanged",
+ "agents": 10,
+ "roles": [
+  "audit:cv-leakage",
+  "audit:signal-timing",
+  "audit:statistics",
+  "audit:prereg-repro",
+  "audit:confounds-quality-ethics",
+  "verify:cv-leakage",
+  "verify:signal-timing",
+  "verify:statistics",
+  "verify:prereg-repro",
+  "verify:confounds-quality-ethics"
+ ],
+ "model": "same model as the main session (workflow default)",
+ "permissions": "read-only instructions (no file modification); shell read commands allowed; no raw EEG available",
+ "prompts": "reports/runs/AUDIT/workflow_script.js (exact prompts; auditors received file paths only, not this report's conclusions)",
+ "outputs": [
+  "reports/runs/AUDIT/audit_findings_verified.json",
+  "reports/AUDIT_FINDINGS.md"
+ ],
+ "result_summary": "37 findings: CONFIRMED 21, PLAUSIBLE 16, REFUTED 0; adjusted severity critical 1, major 17, minor 19",
+ "file_sha256": {
+  "reports/runs/AUDIT/workflow_script.js": "2ea52f74e2723af70aaa874c369f12d606c41d88aa4eb72797bcbe4af4587c04",
+  "reports/runs/AUDIT/audit_findings_verified.json": "d5dba12f9434b2344ef60fc2c83b24a5b32068fa90773585b6883895ba656657"
+ },
+ "verdict": "KEEP (findings integrated into INITIAL_ANALYSIS §15.2, STOP_REPORT)",
+ "redaction": "After the run, the lab-PC hostname, Windows user folder name, time-of-day parts of recording file names (YYYYMMDD_<hhmmss>) and one participant session time were replaced with placeholders in the stored JSON/Markdown. Content otherwise unchanged; hashes above are of the redacted files."
+}

@@ -1,0 +1,54 @@
+{
+ "run_id": "T01",
+ "purpose": "Existing rgb-eeg-lab pytest suite (synthetic data, user code unchanged)",
+ "command": "python research/validation/t01_rgb_eeg_lab_tests.py",
+ "cwd": ".",
+ "started_utc": "2026-11-25T17:43:54+00:00",
+ "git_commit": "aa3469a84f2e30a883612bec3e24d411c4291690",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "scipy": "1.18.1",
+  "sklearn": "1.9.1",
+  "mne": "1.13.2",
+  "pyxdf": "1.18.0",
+  "pylsl": "1.19.0",
+  "pytest": "9.2.0",
+  "matplotlib": "3.11.2"
+ },
+ "config": {
+  "command": "python -m pytest tests -q -p no:cacheprovider",
+  "cwd": "rgb-eeg-lab"
+ },
+ "inputs": [
+  "rgb-eeg-lab/tests/test_pipeline.py",
+  "rgb-eeg-lab/scripts/xdf_qc.py",
+  "rgb-eeg-lab/scripts/train_svm.py",
+  "rgb-eeg-lab/scripts/protocol.py",
+  "rgb-eeg-lab/config/protocol.json"
+ ],
+ "outputs": [],
+ "shapes": {},
+ "metrics": {
+  "pytest_exit_code": 0,
+  "pytest_summary": "33 passed in 23.13s"
+ },
+ "notes": [],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/t01_rgb_eeg_lab_tests.py": "1dd9d1ad2014cbb028ffdb13e067a4d60aa488174cc3e77ca22f645e6e39ae74",
+  "research/validation/_runlog.py": "0b183944bf32f0bcd318f383adf62d07fe595e2694fbd2e0b2ac1bcb91f393f7",
+  "rgb-eeg-lab/tests/test_pipeline.py": "e127a4b7acc4f21d2ca96ae55c582272b81869568f1a654f08f2e0d29c890b38",
+  "rgb-eeg-lab/scripts/xdf_qc.py": "9444c2d65ff54972dfbb929ce54bece9294cb759d92b0503b5f6168fd9766d86",
+  "rgb-eeg-lab/scripts/train_svm.py": "0bc3caea8360b32457f87d05a32b713dd694c8a2248328bc730662be9377c527",
+  "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
+  "rgb-eeg-lab/config/protocol.json": "c7e5cacb63a13ae12a7201e49469d766b03c19cbac7a3c283910007f81900c4f"
+ },
+ "exit_status": "ok",
+ "finished_utc": "2026-11-25T17:44:19+00:00",
+ "duration_sec": 23.62,
+ "warnings_total": 0,
+ "warnings_distinct": 0
+}

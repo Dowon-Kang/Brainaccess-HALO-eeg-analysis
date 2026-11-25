@@ -151,6 +151,9 @@ n_above = int((M.values > sj.loc[SUBJ, "null95"].values[None, :]).sum())
 print(f"\npipeline x subject cells above that subject's null95: {n_above} / {M.size} "
       f"(5% expected under the null if independent = {0.05*M.size:.1f})")
 run.metric("cells_above_null95", f"{n_above}/{M.size}")
+per_subj_above = {sj_: int((M[sj_] > sj.loc[sj_, "null95"]).sum()) for sj_ in SUBJ}
+print("pipelines above the subject's null95, per subject:", per_subj_above, "of", len(M))
+run.metric("pipelines_above_null95_per_subject", per_subj_above)
 
 pd.DataFrame(checks).to_csv(os.path.join(run.dir, "consistency_checks.csv"), index=False)
 run.output(os.path.join(run.dir, "consistency_checks.csv"))
@@ -180,10 +183,12 @@ axes[0].set_yticks(range(len(order)))
 axes[0].set_yticklabels([m.set_index("method").loc[i, "pipeline"] for i in order], fontsize=7)
 axes[0].legend(fontsize=7, frameon=False, loc="lower left")
 fig.suptitle("V01 · Stored 19-pipeline results vs. each subject's permutation-null spread (leave-one-block-out)", fontsize=11)
-fig.text(0.01, 0.01, "Source: rgb-ml-analysis/results/methods.csv, subjects.csv (stored aggregates; not regenerated). "
-         "Null band = null_mean ± 1.96·SD, SD implied from (null95 − null_mean)/1.645 (normal approx.). "
-         "Blue = baseline pipeline. Limitation: null spread was estimated for the O1·O2 pipeline only.", fontsize=7)
-fig.tight_layout(rect=(0, 0.04, 1, 0.96))
+fig.text(0.01, 0.035, "Data: REAL-data stored aggregates (rgb-ml-analysis/results/methods.csv, subjects.csv; cannot be regenerated without raw EEG). "
+         "n = valid obs trials per subject. Null band = null_mean ± 1.96·SD, SD implied from (null95 − null_mean)/1.645 (normal approx.); "
+         "n_perm = 1000 (P002, P003) / 200 (P08, P001).", fontsize=6.5)
+fig.text(0.01, 0.012, "Interpretation: pipelines above the subject's null 95th pct — P002 16/19, P003 2/19, P08 0/19, P001 0/19; differences between pipelines are within null spread. "
+         "Limitations: null spread estimated for the O1·O2 pipeline only; all 19 values come from the same CV (selection bias). Blue = baseline.", fontsize=6.5)
+fig.tight_layout(rect=(0, 0.06, 1, 0.96))
 fp = os.path.join(FIG, "V01_pipelines_vs_null.png")
 fig.savefig(fp, dpi=130)
 run.output(fp)

@@ -5,9 +5,13 @@ Run on the machine that holds the raw data (e.g. the lab PC), NOT in the cloud:
 
 Writes one row per file: relative path, size in bytes, SHA-256, modification time (UTC), and a
 'kind' guess from the file name (.db / .xdf / _events.csv / _events.json / other).
-The manifest contains file names and hashes only, never signal values. File names may contain participant codes
-and recording timestamps: keep the manifest with the team's restricted data, commit only if the team agrees.
-The SHA-256 of the manifest file itself is printed; record it in EVALUATION_PROTOCOL.md when the protocol is frozen.
+The manifest contains file paths, kinds, sizes, hashes and modification times, never signal values. File names may
+contain participant codes and recording timestamps: keep the manifest with the team's restricted data, commit only if
+the team agrees.
+DATA VERSION: the printed `data_version_sha256` is computed ONLY from the sorted (root, rel_path, size_bytes, sha256)
+of the data files, excluding mtime (copies/restores keep the same version) and excluding SQLite side files
+(-wal / -shm), which change whenever a database is opened. Checkpoint or close the databases before running if -wal
+files exist (they are listed with a warning). Record data_version_sha256 in EVALUATION_PROTOCOL.md §2 at freeze.
 """
 import argparse
 import csv
@@ -53,7 +57,15 @@ def main():
         w = csv.DictWriter(f, fieldnames=list(rows[0]) if rows else ["root", "rel_path", "kind", "size_bytes", "sha256", "mtime_utc"])
         w.writeheader()
         w.writerows(rows)
-    print(f"{len(rows)} files -> {a.out}  (manifest sha256 = {sha256(a.out)})")
+    core = [r for r in rows if r["kind"] not in ("db_wal", "db_shm")]
+    h = hashlib.sha256()
+    for r in core:
+        h.update(f"{r['root']}\t{r['rel_path']}\t{r['size_bytes']}\t{r['sha256']}\n".encode("utf-8"))
+    print(f"{len(rows)} files -> {a.out}")
+    print(f"data_version_sha256 = {h.hexdigest()}  (over {len(core)} files; mtime and -wal/-shm excluded)")
+    side = [r["rel_path"] for r in rows if r["kind"] in ("db_wal", "db_shm")]
+    if side:
+        print(f"WARNING: {len(side)} SQLite side files present (not in data version); checkpoint/close databases first: {side[:5]}")
     for k in sorted({r['kind'] for r in rows}):
         print(f"  {k:12s} {sum(r['kind'] == k for r in rows)}")
 

@@ -2,8 +2,9 @@
  "run_id": "V01",
  "purpose": "Audit stored exploratory results: consistency + selection-bias diagnostics",
  "command": "python research/validation/v01_results_audit.py",
- "started_utc": "2026-11-25T16:49:52+00:00",
- "git_commit": "ad39d1d7f4b06b74f013224556c303ecd2f66d21",
+ "cwd": ".",
+ "started_utc": "2026-11-25T17:45:36+00:00",
+ "git_commit": "aa3469a84f2e30a883612bec3e24d411c4291690",
  "git_dirty": true,
  "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
  "versions": {
@@ -15,6 +16,7 @@
   "pyriemann": "0.12",
   "matplotlib": "3.11.2"
  },
+ "config": {},
  "inputs": [
   "rgb-ml-analysis/results/methods.csv",
   "rgb-ml-analysis/results/subjects.csv",
@@ -59,6 +61,12 @@
   "kendall_W": 0.409,
   "kendall_W_p": 0.043,
   "cells_above_null95": "18/76",
+  "pipelines_above_null95_per_subject": {
+   "P002": 16,
+   "P003": 2,
+   "P08": 0,
+   "P001": 0
+  },
   "consistency_checks_pass": "28/28"
  },
  "notes": [
@@ -66,14 +74,17 @@
  ],
  "raw_eeg_used": false,
  "file_sha256": {
-  "research/validation/v01_results_audit.py": "c6b6670dcc3c8f89c753b1048dc38aa0beba96ea2bdf628ba2d0f835090d0f77",
-  "research/validation/_runlog.py": "682dd7eca34194a4fa3792e7d9ce2267954fbcf5fc36feb46a678cbff275b4cd",
+  "research/validation/v01_results_audit.py": "0286877b967d80512e92810d105bf4949ade7b10768924645bd36e179f883a94",
+  "research/validation/_runlog.py": "0b183944bf32f0bcd318f383adf62d07fe595e2694fbd2e0b2ac1bcb91f393f7",
   "rgb-ml-analysis/results/methods.csv": "b9cde970878fdde76b60fa70c789fb95d68a0ff0f9a6b62241537abb366fba98",
   "rgb-ml-analysis/results/subjects.csv": "67fa845a315b161de3be9f8e51987f406579c06ffb1784f029f3bb655dff5c8a",
   "rgb-ml-analysis/results/sessions.csv": "7ed1a101da2bb638e32bc1d9944264a694d0df7ac2927358d94772c37888b943",
   "rgb-ml-analysis/results/controls.csv": "8743c6b9266dd975610b6f20a85b72c153bae942cf1e250ec27371bc88058c23",
   "rgb-ml-analysis/results/generalization.csv": "9a0474a62d49b826b45cf0168ec3fd74a71a155ad65de1113fc80b91d97daf14"
  },
- "finished_utc": "2026-11-25T16:49:53+00:00",
- "duration_sec": 0.71
+ "exit_status": "ok",
+ "finished_utc": "2026-11-25T17:45:37+00:00",
+ "duration_sec": 0.62,
+ "warnings_total": 0,
+ "warnings_distinct": 0
 }

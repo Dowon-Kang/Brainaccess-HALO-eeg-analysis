@@ -3,7 +3,10 @@
 Question: if a classifier knew nothing but the global sequence number of a trial (s001-s090, as written in the marker),
           how well could it predict the colour under the grouping the stored analysis used
           (groups = subject_session_block, leave-one-block-out, all of a subject's sessions pooled)?
-Rule    : predict the majority colour among TRAINING trials with the same sequence number; if none, guess at random.
+Rule    : predict the majority colour among TRAINING trials with the same sequence number; ties and unseen positions
+          are broken uniformly at random. The reported value is the EXACT expectation of balanced accuracy over all
+          tie-breaks (each test trial contributes P(correct) = 1/k if the true colour is among the k tied labels, else 0;
+          unseen position -> 1/3). Earlier version (first V-04c run) reported a single random tie-break realisation.
 Session structures reconstructed from rgb-ml-analysis/results/sessions.csv + rgb-eeg-lab/docs/plan_changes.md
 (INFERRED, see reports/INITIAL_ANALYSIS.md §4); trial rejection ignored (all obs trials kept, 2 per sequence).
 Interpretation: this is an upper bound on how much a perfectly position-encoding EEG feature could exploit the
@@ -14,7 +17,6 @@ import sys
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import balanced_accuracy_score
 
 sys.path.insert(0, os.path.dirname(__file__))
 import _synth as S  # noqa: E402
@@ -22,7 +24,9 @@ from _runlog import Run  # noqa: E402
 
 run = Run("V04c", "Position-only oracle under the stored leave-one-block-out grouping (design analysis)",
           inputs=["rgb-eeg-lab/scripts/protocol.py", "rgb-eeg-lab/config/protocol.json", "research/validation/_synth.py",
-                  "rgb-ml-analysis/results/sessions.csv"], modules=("numpy", "pandas", "sklearn"))
+                  "rgb-ml-analysis/results/sessions.csv"], modules=("numpy", "pandas"),
+          config=dict(rule="majority colour of training trials at the same sequence number; exact expectation over random tie-breaks",
+                      grouping="subject_session_block (stored analysis)", trial_rejection="ignored (2 obs per sequence)"))
 B, OFF = S.BASE, S.OFF
 ALL = range(1, 91)
 # (session tag, seed, sequence numbers included)
@@ -34,7 +38,6 @@ STRUCT = {
     "P08": [("1109", B + 8, ALL)],
     "control: 3 sessions, distinct seeds": [("s1", B + 2, ALL), ("s2", B + 2 + OFF, ALL), ("s3", B + 2 + 2 * OFF, ALL)],
 }
-rng = np.random.default_rng(0)
 rows = []
 for subj, sessions in STRUCT.items():
     y, seq, grp = [], [], []
@@ -45,24 +48,28 @@ for subj, sessions in STRUCT.items():
             for _rep in (1, 2):
                 y.append(c); seq.append(q); grp.append(f"{tag}_b{b}")
     y, seq, grp = map(np.array, (y, seq, grp))
-    pred = np.empty_like(y)
+    pcorrect = np.zeros(len(y))
+    n_tie = n_unseen = 0
     for g in np.unique(grp):
         te, tr = grp == g, grp != g
         for i in np.where(te)[0]:
             lab = y[tr & (seq == seq[i])]
             if len(lab) == 0:
-                pred[i] = ["R", "G", "B"][rng.integers(3)]
-            else:
-                vals, cnt = np.unique(lab, return_counts=True)
-                top = vals[cnt == cnt.max()]
-                pred[i] = top[rng.integers(len(top))]
-    ba = balanced_accuracy_score(y, pred)
-    rows.append(dict(structure=subj, n_trials=len(y), n_groups=len(np.unique(grp)), position_oracle_bacc=round(ba, 4)))
+                pcorrect[i] = 1 / 3
+                n_unseen += 1
+                continue
+            vals, cnt = np.unique(lab, return_counts=True)
+            top = vals[cnt == cnt.max()]
+            n_tie += len(top) > 1
+            pcorrect[i] = (y[i] in top) / len(top)
+    recalls = [pcorrect[y == c].mean() for c in ["R", "G", "B"]]
+    rows.append(dict(structure=subj, n_trials=len(y), n_groups=len(np.unique(grp)), n_test_trials_tied=int(n_tie),
+                     n_test_trials_unseen=int(n_unseen), expected_bacc=round(float(np.mean(recalls)), 4)))
 df = pd.DataFrame(rows)
 print(df.to_string(index=False))
 fp = os.path.join(run.dir, "position_oracle.csv")
 df.to_csv(fp, index=False)
 run.output(fp)
 for _, r in df.iterrows():
-    run.metric(f"bacc[{r.structure}]", float(r.position_oracle_bacc))
+    run.metric(f"expected_bacc[{r.structure}]", float(r.expected_bacc))
 run.close()

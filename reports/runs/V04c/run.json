@@ -1,16 +1,21 @@
 {
  "run_id": "V04c",
  "purpose": "Position-only oracle under the stored leave-one-block-out grouping (design analysis)",
- "command": "python v04c_position_oracle.py",
- "started_utc": "2026-11-25T17:15:22+00:00",
- "git_commit": "74c22d50c21020415360341e8384721d14811858",
+ "command": "python research/validation/v04c_position_oracle.py",
+ "cwd": "research/validation",
+ "started_utc": "2026-11-25T17:43:26+00:00",
+ "git_commit": "aa3469a84f2e30a883612bec3e24d411c4291690",
  "git_dirty": true,
  "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
  "versions": {
   "python": "3.13.18",
   "numpy": "2.5.5",
-  "pandas": "3.1.1",
-  "sklearn": "1.9.1"
+  "pandas": "3.1.1"
+ },
+ "config": {
+  "rule": "majority colour of training trials at the same sequence number; exact expectation over random tie-breaks",
+  "grouping": "subject_session_block (stored analysis)",
+  "trial_rejection": "ignored (2 obs per sequence)"
  },
  "inputs": [
   "rgb-eeg-lab/scripts/protocol.py",
@@ -23,23 +28,26 @@
  ],
  "shapes": {},
  "metrics": {
-  "bacc[P001]": 1.0,
-  "bacc[P002 (1125 = session-1 seed)]": 1.0,
-  "bacc[P002 (1125 = session-2 seed)]": 0.5574,
-  "bacc[P003]": 0.934,
-  "bacc[P08]": 0.3333,
-  "bacc[control: 3 sessions, distinct seeds]": 0.3037
+  "expected_bacc[P001]": 1.0,
+  "expected_bacc[P002 (1125 = session-1 seed)]": 1.0,
+  "expected_bacc[P002 (1125 = session-2 seed)]": 0.5778,
+  "expected_bacc[P003]": 0.931,
+  "expected_bacc[P08]": 0.3333,
+  "expected_bacc[control: 3 sessions, distinct seeds]": 0.3074
  },
  "notes": [],
  "raw_eeg_used": false,
  "file_sha256": {
-  "research/validation/v04c_position_oracle.py": "9d5cee83a066c2ee4d29bb7403345ef52e192b5d87a9a2ec63d507fe94c7b4cb",
-  "research/validation/_runlog.py": "682dd7eca34194a4fa3792e7d9ce2267954fbcf5fc36feb46a678cbff275b4cd",
+  "research/validation/v04c_position_oracle.py": "dd706f9088b065ae67ba0eeea621cf16264a4b2baeda48f026c9a5fc3a0241e3",
+  "research/validation/_runlog.py": "0b183944bf32f0bcd318f383adf62d07fe595e2694fbd2e0b2ac1bcb91f393f7",
   "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
   "rgb-eeg-lab/config/protocol.json": "c7e5cacb63a13ae12a7201e49469d766b03c19cbac7a3c283910007f81900c4f",
   "research/validation/_synth.py": "f1f1a213b8674b0097e40da95ec10a4a5db708f7b1a145ba4a85965c74916919",
   "rgb-ml-analysis/results/sessions.csv": "7ed1a101da2bb638e32bc1d9944264a694d0df7ac2927358d94772c37888b943"
  },
- "finished_utc": "2026-11-25T17:15:22+00:00",
- "duration_sec": 0.12
+ "exit_status": "ok",
+ "finished_utc": "2026-11-25T17:43:26+00:00",
+ "duration_sec": 0.09,
+ "warnings_total": 0,
+ "warnings_distinct": 0
 }

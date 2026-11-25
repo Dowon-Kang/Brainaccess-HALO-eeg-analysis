@@ -1,0 +1,20 @@
+                   pipeline  count   mean    std     se  t_vs_1/3
+            F4b ERP+SVM-RBF     20 0.3310 0.0234 0.0052   -0.4425
+    F2d sustained Cov-TS+LR     20 0.3315 0.0263 0.0059   -0.3147
+F7 EA + sustained Cov-TS+LR     20 0.3331 0.0255 0.0057   -0.0325
+         F3c ERP+PCA10+sLDA     20 0.3332 0.0235 0.0052   -0.0176
+          F4c xDAWN-cov+MDM     20 0.3336 0.0205 0.0046    0.0606
+         F4a ERP+SVM-linear     20 0.3377 0.0243 0.0054    0.7993
+   F6 nested-tuned ERP+sLDA     20 0.3378 0.0257 0.0058    0.7724
+         F2b BandPower+sLDA     20 0.3380 0.0333 0.0074    0.6222
+       F1 ERP+sLDA +augment     20 0.3387 0.0221 0.0049    1.0856
+    F8b stacking(ERP,TS,BP)     20 0.3408 0.0306 0.0068    1.0977
+        F7 EA + xDAWN-TS+LR     20 0.3411 0.0277 0.0062    1.2554
+            F2c xDAWN-TS+LR     20 0.3416 0.0243 0.0054    1.5144
+        F3a ERP+MI-k20+sLDA     20 0.3417 0.0173 0.0039    2.1550
+ F8a soft-voting(ERP,TS,BP)     20 0.3424 0.0278 0.0062    1.4611
+      F7 EA + ERP(4ch)+sLDA     20 0.3427 0.0253 0.0057    1.6548
+F2a ERP(4ch)+LDA(no shrink)     20 0.3432 0.0252 0.0056    1.7552
+         F3b ERP+RFE20+sLDA     20 0.3451 0.0261 0.0058    2.0148
+          F2a ERP(4ch)+sLDA     20 0.3454 0.0205 0.0046    2.6267
+        F2a ERP(O1,O2)+sLDA     20 0.3469 0.0284 0.0064    2.1255

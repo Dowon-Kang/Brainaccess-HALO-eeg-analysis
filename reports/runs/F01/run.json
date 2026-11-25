@@ -1,0 +1,52 @@
+{
+ "run_id": "F01",
+ "purpose": "Regenerate V-03 and V-04 figures from stored run outputs",
+ "command": "python research/validation/make_figures.py",
+ "cwd": ".",
+ "started_utc": "2026-11-25T17:57:14+00:00",
+ "git_commit": "aa3469a84f2e30a883612bec3e24d411c4291690",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "pandas": "3.1.1",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "config": {
+  "which": [
+   "v03",
+   "v04"
+  ]
+ },
+ "inputs": [
+  "reports/runs/V03c/null_scores_combined_V03_V03c.csv",
+  "reports/runs/V03/scores.csv",
+  "reports/runs/V04/B_summary.csv",
+  "reports/runs/V04/C_perm.csv"
+ ],
+ "outputs": [
+  "reports/figures/V03_null_calibration.png",
+  "reports/figures/V04_schedule_confounds.png"
+ ],
+ "shapes": {},
+ "metrics": {
+  "v03_pipelines_plotted": 19
+ },
+ "notes": [],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/make_figures.py": "d93b7466b850c11eba18d486dbaf8b79bec06d976741a4a90959fa45dff826a6",
+  "research/validation/_runlog.py": "0b183944bf32f0bcd318f383adf62d07fe595e2694fbd2e0b2ac1bcb91f393f7",
+  "reports/runs/V03c/null_scores_combined_V03_V03c.csv": "0d33c7d1e24ddf98fb72f9ec7048968b3e38e173f9f02ba998162dc8f660c5ca",
+  "reports/runs/V03/scores.csv": "e24bddc8b014b6534b646790e5d9eba6093b30ba0953b628dbb557d0c9677c9b",
+  "reports/runs/V04/B_summary.csv": "d3e07f7361c83901d46087c159a5952f4173bcee7acf9f57f544900867aada5c",
+  "reports/runs/V04/C_perm.csv": "64d1d80a0ca41ab066145ff9a065ae462b54f3553903ddc0a2f30f363ced2475"
+ },
+ "exit_status": "ok",
+ "finished_utc": "2026-11-25T17:57:15+00:00",
+ "duration_sec": 0.97,
+ "warnings_total": 0,
+ "warnings_distinct": 0
+}

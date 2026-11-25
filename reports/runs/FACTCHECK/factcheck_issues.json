@@ -1,0 +1,543 @@
+[
+ {
+  "task": "initial-A",
+  "issues": [
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §0 (table row 기본 누수 방지, line 16)",
+    "wrong_text": "V-03(19개 모두 null 평균 0.331–0.347)",
+    "evidence": "reports/runs/V03/summary.csv and scores.csv contain only 18 distinct pipelines: the 16 from rgb_pipeline.pipelines plus 'F7 EA + ERP(4ch)+sLDA' and 'F7 EA + xDAWN-TS+LR'. 'F7 EA + sustained Cov-TS+LR' was never run, because research/validation/v03_synthetic_leakage.py:40 names() returns only those 2 EA variants. F6 got only 3 reps. EXPERIMENT_LOG.md:55 itself says '18개 상관 검정 중'. The 0.331–0.347 range is correct for those 18.",
+    "corrected_text": "V-03(저장된 19개 중 18개 — EA + 지속반응 미실행 — null 평균 0.331–0.347; F6은 3회)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §8 (line 137)",
+    "wrong_text": "다른 날 36.0–40.6%",
+    "evidence": "rgb-ml-analysis/results/generalization.csv rows for '새로운 날' are 36.0, 37.7, 36.4, 37.7 (P002) and 37.3, 38.6, 33.3, 40.6 (P003). The minimum is 33.3 (P003, ERP 4채널, 새로운 날 (정렬 없음)), not 36.0.",
+    "corrected_text": "다른 날 33.3–40.6%",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §2 (table row 스트림 참조, line 52)",
+    "wrong_text": "Board 3.0.0 스트림 메타데이터(장비 미착용)",
+    "evidence": "rgb-eeg-lab/data/board_v3.0.0_stream_reference.json:3 \"source\": \"data/sub-P003_ses-main_run-05.xdf (2026-11-21 녹화)\". That is P003's main-measurement block 1, recorded while P003 wore the device, and the file includes raw_eeg_sd_uV from it. 'Not worn' (장비 미착용, plan_changes.md:62) describes the 2026-11-22 Board 3.1.0 check, not this reference file.",
+    "corrected_text": "Board 3.0.0 스트림 메타데이터(출처: P003 본측정 run-05 XDF, 2026-11-21 녹화)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §1 (table row rgb-ml-analysis/, line 35)",
+    "wrong_text": "2026-11-25~26 커밋",
+    "evidence": "git log -- rgb-ml-analysis shows a single commit, 79f7a48, dated 2026-11-25 23:56:16 +0900. The 2026-11-26 commit (ad39d1d, 00:06 +0900) is the rgb-eeg-lab commit.",
+    "corrected_text": "2026-11-25 커밋(79f7a48)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §4 (header line 69)",
+    "wrong_text": "설계·seed·Board 열은 [추론: 날짜와 plan_changes.md 기준]",
+    "evidence": "The §4 table that follows has the columns 세션, 측정일, obs 전체, 유효, 유효율, 사용, 설계(추론) and 색 순서 seed(추론). There is no Board column, so the header contradicts the table.",
+    "corrected_text": "설계·seed 열은 [추론: 날짜와 plan_changes.md 기준]",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §3 (table row 시행 수, line 63)",
+    "wrong_text": "gray1 수 UNKNOWN",
+    "evidence": "rgb-ml-analysis/results/controls.csv gives the clean gray1 trial counts n = 115 (P002), 87 (P003) and 60 (P08). RESEARCH_MAP.md:26 cites these same counts. Only the pre-rejection total and the P001 count are unknown.",
+    "corrected_text": "gray1 유효 시행 수 P002 115, P003 87, P08 60 (controls.csv); 정제 전 전체 및 P001의 gray1 수는 UNKNOWN",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §7 (table row 분류기, line 124)",
+    "wrong_text": "sLDA 외 18종",
+    "evidence": "rgb_pipeline.py:171-210 + run_within.py:21-22 give 19 pipelines, but these use only 8 distinct classifiers: sLDA (9 of the 19 pipelines), LDA without shrinkage, LogisticRegression, linear SVC, RBF SVC, MDM, soft voting and stacking. '18 others' counts pipelines, not classifiers.",
+    "corrected_text": "sLDA, LDA(무수축), 로지스틱 회귀, 선형·RBF SVM, MDM, 소프트 보팅, 스태킹 (19개 파이프라인)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §1 (진행 상태, line 40)",
+    "wrong_text": "`plan_changes.md`의 미결 결정(v2.0 데이터 병합, P003 블록 결합, 반복 세션 사용 방식)은 \"팀 승인 전\" 상태로 남아 있다.",
+    "evidence": "plan_changes.md uses the quoted phrase '팀 승인 전' only for the P003 block-combination proposal (:81, :92). The v2.0 merge is marked '팀이 결정한다(미결정)' (:25), and repeated-session use is marked '미결: ... 팀이 결정' (:56).",
+    "corrected_text": "`plan_changes.md`의 미결 결정(v2.0 데이터 병합 \"미결정\", P003 블록 결합 \"팀 승인 전\", 반복 세션 사용 방식 \"미결\")은 모두 팀 결정 대기 상태로 남아 있다.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §6 [추론 / 위험] item 2 (line 108)",
+    "wrong_text": "약 16 ms 지터는 50 ms 창 ERP 특징(0.05–0.5 s)을 흐리게 한다(SNR 저하, 누수는 아님).",
+    "evidence": "The 15.7 ms figure is the SD of consecutive-sample intervals on the live Board LSL stream/XDF (plan_changes.md:66), not a measured marker-alignment error on the .db path. The audit verdict on signal-timing-01 (audit_findings_verified.json) says the .db jitter is undocumented and that an interval SD is not an alignment error. It also notes that all markers passed the 10 ms nearest-sample check in 7 of 10 sessions, which suggests any jitter at marker positions is mostly under 10 ms.",
+    "corrected_text": "`.db` 타임스탬프에 LSL 스트림과 같은 수준(간격 SD 약 16 ms)의 지터가 있다면 50 ms 창 ERP 특징(0.05–0.5 s)을 흐릴 수 있다(SNR 저하, 누수는 아님). 단 10 ms 정합 검사 통과율로 보아 마커 위치의 지터는 대부분 10 ms 미만일 가능성이 있다.",
+    "severity": "overstatement"
+   }
+  ],
+  "checked_summary": "I checked sections 0–8 of /home/user/Brainaccess-HALO-eeg-analysis/reports/INITIAL_ANALYSIS.md against the sources and found 9 discrepancies: 3 errors, 1 overstatement and 5 minor.\n\n**Errors**\n- §0 says V-03 covered all 19 pipelines. The run has only 18 (EA + sustained Cov-TS was never run; F6 got 3 reps). The 0.331–0.347 range is right for those 18.\n- §8 gives the cross-day range as 36.0–40.6%. generalization.csv has 33.3 as the minimum (P003, 4-channel, no alignment).\n- §2 describes the Board 3.0.0 stream reference as recorded with the device not worn. The JSON names its source as P003's main run-05 XDF from 2026-11-21, a worn recording.\n\n**Overstatement**\n- §6 inference item 2 treats ~16 ms jitter as present on the .db path. That figure is the interval SD of the live LSL stream. The audit says .db jitter is undocumented and suggests marker-position jitter is mostly under 10 ms.\n\n**Minor**\n- The rgb-ml-analysis commit date is given as 2026-11-25~26; it was committed only on 11-25 (79f7a48).\n- The §4 header mentions a Board column that the table does not have.\n- §3 calls the gray1 count UNKNOWN, but controls.csv gives clean counts for three subjects (115/87/60).\n- §7 says \"sLDA 외 18종\"; that counts pipelines, while there are 8 distinct classifiers.\n- §1 attributes the quoted phrase \"팀 승인 전\" to all three open decisions; plan_changes.md uses it only for the P003 block combination.\n\n**What checks out**\n- **Stored results:** all 5 CSVs, their shapes, the 28/28 consistency checks, and the session/trial/valid counts (1,608 / 1,428 / 995; 533/243/136/83). Keep-rate percentages, the class balance in the ERP figure legend, the p-values and Bonferroni values, and the methods means (33.8 / 39.6) also match.\n- **Line references and quotes:** every one in these sections matches the code (ba_io.py, build_cache.py, build_epochs.py, run_extra.py, stim_rgb.py, protocol.py), as do the epoch geometry (840 samples) and feature dimensions (36/18/20/32/64).\n- **Plan and history:** the pre-registered values in protocol.json and research_context.md, the plan_changes and CHANGELOG facts, P02's exclusion reason, the 33 rgb-eeg-lab tests (counted from the test file, not run), the SART commit history, and the V-03b/V-04/V-04b numbers (39.4%, 51.4%, 100%, CIs including 1/3).\n- **Data access:** the claim of no raw data holds; /mnt/user-data is empty and list_computer_folders returns an empty list.\n\n**Not checked:** the 26.6 s test runtime and the external \"연구 프로토콜 §9\" reference."
+ },
+ {
+  "task": "initial-B",
+  "issues": [
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §9 L1",
+    "wrong_text": "V-03: 색 정보 없는 합성 데이터에서 19개 파이프라인 null 평균 0.331–0.347(1/3 + 3 SE 초과 없음)",
+    "evidence": "V-03 tested 18 pipelines, not 19. research/validation/v03_synthetic_leakage.py:37-40 names() returns the 16 rp.pipelines() keys plus only 2 EA variants (\"F7 EA + ERP(4ch)+sLDA\", \"F7 EA + xDAWN-TS+LR\"). reports/runs/V03/summary.csv has 18 null rows, and 'F7 EA + sustained Cov-TS+LR' (methods.csv 'EA + 지속반응') is missing. scores.csv has 431 rows = 17×25 + 2×3, and F6 ran only 3 reps. EXPERIMENT_LOG V-03 itself says '18개 상관 검정 중'.",
+    "corrected_text": "V-03: 색 정보 없는 합성 데이터에서 18개 파이프라인(`pipelines()` 16개 + EA 변형 2개; 'EA + 지속반응'은 미검사, F6 nested는 3회만) null 평균 0.331–0.347(1/3 + 3 SE 초과 없음)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §15.1 table, V-03 row",
+    "wrong_text": "| V-03 | 19개 파이프라인이 null에서 1/3인가 |",
+    "evidence": "Same source: v03_synthetic_leakage.py:37-40 and reports/runs/V03/summary.csv show 18 pipelines evaluated (16 base + 2 EA variants). 'F7 EA + sustained Cov-TS+LR' was never run.",
+    "corrected_text": "| V-03 | 저장된 19개 중 18개 파이프라인(EA + 지속반응 제외)이 null에서 1/3인가 |",
+    "severity": "error"
+   },
+   {
+    "document": "reports/README.md (재현 방법)",
+    "wrong_text": "# 19개 파이프라인 합성 null 보정 (4코어 약 12분)",
+    "evidence": "v03_synthetic_leakage.py:37-40 evaluates 18 pipelines. reports/runs/V03/summary.csv has 18 null rows, with the EA + sustained variant absent. The duration matches: run.json duration_sec 717.76 ≈ 12 min.",
+    "corrected_text": "# 저장된 19개 중 18개 파이프라인(EA + 지속반응 제외) 합성 null 보정 (4코어 약 12분)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §9 L8",
+    "wrong_text": "라벨 미사용 → 누수 아님 | 유효율만 보고 선택. 사전등록 기준과 다름",
+    "evidence": "The files do not show that the threshold was chosen from keep rates. build_epochs.py:46-49 only prints keep rates at several thresholds. 150 µV is also the default in rgb_pipeline.py:45 (epoch ptp_uv=150.0) and is the value in README.md:21. The audit verifiers say the order of decisions cannot be proven: signal-timing-04 verdict says \"'Chosen after inspecting keep rates' is not shown ... the order of decisions is unknown\", and prereg-repro-02 verdict says the claim is 'inference only'.",
+    "corrected_text": "라벨 미사용 → 누수 아님 | 150 µV 결정 과정은 기록 없음(`build_epochs.py:46-49`가 임계값별 유효율을 출력하지만 150 µV는 `rgb_pipeline.epoch` 기본값이기도 해 결정 순서 불명). 사전등록 기준과 다름",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §11",
+    "wrong_text": "P001의 낮은 유효율은 4채널 기준 PTP 150 µV 때문이며 O1·O2만 기준이면 달라질 수 있다",
+    "evidence": "A trial is kept only if (ptp < 150) & ~contact_bad (run_within.py:9; build_epochs.py:40,47; README.md:21 '진폭 150 µV 초과이거나 접촉 끊김이면 제외'). No stored file breaks down rejections by reason: sessions.csv has only total/kept. So nothing in the sources shows whether P001's 22–24% keep rate comes from PTP or from contact loss.",
+    "corrected_text": "P001의 낮은 유효율이 4채널 PTP 150 µV 기준 때문인지 접촉 끊김(contact == 0) 때문인지는 저장된 결과로 구분할 수 없다(제외 사유별 집계 미저장). O1·O2만 기준이면 달라질 수 있다",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §15.2",
+    "wrong_text": "쌍둥이 블록과 순열 교환가능성(major)",
+    "evidence": "audit_findings_verified.json gives the twin-block finding (cv-leakage-01) and the permutation exchangeability findings (cv-leakage-02, statistics-05) all verdict PLAUSIBLE. In the same list only the IRB item is labelled '(major, PLAUSIBLE)', so this one reads as confirmed.",
+    "corrected_text": "쌍둥이 블록과 순열 교환가능성(major, PLAUSIBLE: cv-leakage-01·02, statistics-05)",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §9 L3",
+    "wrong_text": "2026-11-24 이전 모든 기록은 세션1 seed (plan_changes 변경3)",
+    "evidence": "plan_changes.md:55 says '2026-11-24**까지의** 모든 기록은 세션 1 seed', i.e. up to and including 11-24. The same sentence counts P002_1124 (recorded 11-24) and P003_1125 (11-25) as same-order sessions. P003_1125 is covered only by plan_changes.md:75 ('--session 1 --start-block 3'), not by the date rule.",
+    "corrected_text": "2026-11-24까지의 모든 기록은 세션1 seed이고(plan_changes.md:55), P003 11-25 run-09도 `--session 1`로 실행되었다(plan_changes.md:75)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §9 L3",
+    "wrong_text": "동일 스케줄에서도 BA 상승 없음(0.327–0.338)",
+    "evidence": "reports/runs/V04/stdout.log, section B: the identical-schedule cells range from 0.3270 to 0.3348. The 0.338 upper bound (0.3383) is the distinct-schedule, drift 0, block cell. 0.327–0.338 is the range over all 18 B cells.",
+    "corrected_text": "동일 스케줄에서도 BA 상승 없음(동일 스케줄 0.327–0.335, 서로 다른 스케줄 포함 전체 0.327–0.338)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §15.1 table, V-02 row",
+    "wrong_text": "명목 sRGB에서 회색 대비 휘도 차 ≤ 0.6%",
+    "evidence": "reports/runs/V02/stimulus_photometry.csv: the ≤0.6% figure is the Michelson contrast (−0.39/−0.58/−0.07%; run.json max_abs_michelson_vs_grey 0.0058). The relative luminance difference is larger: Y_ratio_to_grey is 0.9922 (R) and 0.9885 (G), i.e. up to 1.15%. The audit (confounds-quality-ethics-02) says 'within about 1%', and EXPERIMENT_LOG V-02 explicitly says 'Michelson 대비'.",
+    "corrected_text": "명목 sRGB에서 회색 대비 Michelson 대비 ≤ 0.6%(상대 휘도 차는 최대 1.2%, G)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §15.2",
+    "wrong_text": "P003 결합 방식이 팀 제안과 다름",
+    "evidence": "plan_changes.md:81 heading: 'P003 세션 1 블록 결합 — Claude 제안 (2026-11-25, **팀 승인 전, 결과 보기 전 작성**)'. :92 '[ ] 팀 승인' is unchecked. The confounds-quality-ethics-06 verifier corrected the auditor on this point: 'plan_changes.md:86-92 is an unapproved Claude 제안'. It is not a team proposal.",
+    "corrected_text": "P003 결합 방식이 팀 승인 전 결합 제안(plan_changes.md:81-92, 'Claude 제안')과 다름",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/README.md (문서 표)",
+    "wrong_text": "초기 연구환경 분석 10개 항목 (데이터 구조, Shape, 데이터 수, 채널, 마커 정합성, 파이프라인, 평가, 누수, 문제점, UNKNOWN)",
+    "evidence": "INITIAL_ANALYSIS.md has §0 요약 plus 15 numbered sections. The README omits §1 목적·진행 상태, §11 데이터 품질, §12 연구윤리·개인정보 (IRB), §14 참고문헌 and §15 검증 실행과 독립 감사 결과.",
+    "corrected_text": "초기 연구환경 분석 (§0 요약 + §1–15: 목적, 데이터 구조, Shape, 데이터 수, 채널, 마커 정합성, 파이프라인, 평가, 누수, 문제점, 데이터 품질, 연구윤리·개인정보, UNKNOWN, 참고문헌, 검증 실행·독립 감사 결과)",
+    "severity": "minor"
+   }
+  ],
+  "checked_summary": "I checked every number, line reference and factual claim in INITIAL_ANALYSIS.md §9–§15 and in reports/README.md against the sources. Eleven discrepancies remain, listed in issues: three errors, three overstatements and five minor wording problems.\n\nChecked against run outputs (V01–V04c run.json, stdout.log and CSVs):\n- V-01: 28/28 checks; null SD 2.55–5.90; ratio to iid SD 1.14–1.29; the leave-one-subject-out pick is ERP O1·O2 + sLDA every time, mean 39.58; Kendall's W 0.409.\n- V-02: Michelson contrast −0.39/−0.58/−0.07%; S-cone contrast for B 11.076.\n- V-03: null means 0.331–0.347, max t 2.63.\n- V-03b: 0.334/0.335 with CIs that include 1/3; 0.385/0.394 at 3 µV; SD ratio 1.11–1.28.\n- V-04: 0.206 / 0.3935; false-positive rate 0–0.10; carry-over 0.3388.\n- V-04b: 0.514, last position 1.000.\n- V-04c: all values match.\n\nChecked against stored results:\n- methods.csv: deltas −3.3 to +5.8; baseline 33.8.\n- subjects.csv: P002 Bonferroni p 0.019; mixed 1000/200 permutations.\n- sessions.csv: keep rates 22–24% and 98–99%.\n- controls.csv: n 115/87/60.\n- erp_by_colour.png legend: 24–46 trials per colour.\n- gray1 keep rate 115/270 = 42.6% vs obs 533/540 = 98.7%.\n\nChecked against code: rgb_pipeline.py:171-235, build_epochs.py:5, :5-15, :38, :40 and :48-49, train_svm.py:65-71, and the grep showing that only results_within_*/extra/perm/perm_fine CSVs are written by code.\n\nChecked against docs and other sources: research_context.md:39, plan_changes.md:29/40/55/56/57/75, the CHANGELOG 2026-11-03 21:02 entry, rgb-ml-analysis/README.md:22, REPORT.md:108/110, the CLAUDE.md/CHECKLIST.md IRB rule, hostname and username in locks/ and the README. The audit JSON gives 37 findings: 21 CONFIRMED, 16 PLAUSIBLE; adjusted severity critical 1, major 17, minor 19; statistics-01 is the critical, CONFIRMED. The README run timings match run.json, the 33 tests match 31 test functions with one 3-case parametrize, make_manifest arguments match, and RESEARCH_MAP has 14 areas and E01–E20. Bibliographic details of the references are consistent with known citations.\n\nMain problems:\n- **Error:** V-03 is described as covering 19 pipelines in §9 L1, §15.1 and the README. It actually tested 18: 'EA + 지속반응' was never run, and F6 ran only 3 reps.\n- **Overstatements:**\n  - L8 states as fact that the 150 µV threshold was chosen from keep rates; the audit verifiers say this cannot be shown.\n  - §11 blames P001's low keep rate on the PTP threshold alone; the stored data cannot separate it from contact loss.\n  - §15.2 lists the twin-block and permutation findings without their PLAUSIBLE label.\n- **Minor:**\n  - L3 says records 'before' 11-24 rather than 'up to' 11-24.\n  - L3 gives the V-04 B range as if it were the identical-schedule range.\n  - V-02 calls the Michelson contrast a 'luminance difference'.\n  - §15.2 calls the P003 combination proposal a 'team proposal'; it is Claude's, pending team approval.\n  - The README describes INITIAL_ANALYSIS as 10 items when it has 15 sections.\n\nNo files were modified."
+ },
+ {
+  "task": "stop-map",
+  "issues": [
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "색 정보가 없는 합성 데이터에서 19개 모두 null 평균이 1/3과 구분되지 않는다(V-03; 핵심 2개 200회 평균 0.334/0.335, V-03b)",
+    "evidence": "V-03 tested only 18 pipelines. research/validation/v03_synthetic_leakage.py names() returns rp.pipelines() (16 entries, rgb_pipeline.py:177-209) plus only 'F7 EA + ERP(4ch)+sLDA' and 'F7 EA + xDAWN-TS+LR'. reports/runs/V03/summary.csv has 18 null rows, and scores.csv has 431 rows = 17x25 + 6. 'F7 EA + sustained Cov-TS+LR' (methods.csv 'EA + 지속반응') was never run. F6 nested had only 3 reps. EXPERIMENT_LOG.md:55 itself says '18개 상관 검정 중'.",
+    "corrected_text": "색 정보가 없는 합성 데이터에서 V-03이 검사한 18개 파이프라인(EA + 지속반응 미검사, F6는 3회만)의 null 평균이 1/3과 구분되지 않는다(V-03; 핵심 2개 200회 평균 0.334/0.335, V-03b)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/RESEARCH_MAP.md",
+    "wrong_text": "색 자극은 3 s 지속인데 0.5 s 이후 지속 반응은 공분산 특징(F2d)에서만 사용",
+    "evidence": "rgb_pipeline.py:132-141: LogBandPower(tmin=0.0) uses X[:, :, i0:] after Crop, so it covers 0-3.0 s (F2b, and the 'bp' member of F8a/F8b). rgb_pipeline.py:181/194/205: the xDAWN pipelines (F2c, F4c, F7 EA+xDAWN, the ensemble 'ts' member) use TimeWindow(-0.2, 1.0). rgb_pipeline.py:183: F2d uses 0.3-3.0 s, and the F7 EA + sustained variant does too. So data after 0.5 s enter many pipelines, not only F2d.",
+    "corrected_text": "색 자극은 3 s 지속인데 ERP 특징은 0.5 s까지만 쓴다. 0.5 s 이후 구간은 밴드파워(F2b, 0–3 s), xDAWN 계열(F2c·F4c, −0.2–1.0 s), 지속 공분산(F2d·EA+지속반응, 0.3–3.0 s)에 들어가며, 지속 반응을 겨냥한 특징은 F2d 계열뿐이다",
+    "severity": "error"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "저장된 CV(세션×블록 그룹)에서는 시퀀스 번호만 알아도 P001 100%, P003 93%, P002 100%(P002_1125가 세션1 seed일 때)로 색을 맞힐 수 있다(V-04c).",
+    "evidence": "v04c_position_oracle.py:7-8 says session structures are INFERRED and 'trial rejection ignored (all obs trials kept, 2 per sequence)'. reports/runs/V04c/position_oracle.csv uses n_trials P001=360 and P003=348, but the stored analysis kept 83 and 243 trials (sessions.csv/subjects.csv). I re-ran the V-04c rule with P001 trials randomly kept at the stored rates (44/180, 39/180) over 200 reps: oracle BA averaged 0.595 (0.41-0.74), not 1.00. The number is an upper bound under assumed structure, yet it sits in §2.1 '검증된 사실'.",
+    "corrected_text": "저장된 CV(세션×블록 그룹)를 재구성한 구조(추론)에서 모든 obs 시행이 남았다고 가정하면, 시퀀스 번호만으로 P001 100%, P003 93%, P002 100%(P002_1125가 세션1 seed일 때)까지 색을 맞힐 수 있다(V-04c, 시행 제외 미반영 상한. P001처럼 유효율이 22–24%이면 이보다 크게 낮다).",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "`.db` 로더는 도착 시각 타임스탬프를 시간순으로 재정렬할 뿐 dejitter·Sample 카운터 검증·기록 끊김 처리를 하지 않는다. 같은 스트림에서 간격 SD 약 15.7 ms와 음수 간격이 보고되어 있다.",
+    "evidence": "The code part checks out (ba_io.py:43,54-55; build_cache.py prints lost/gaps only). The 15.7 ms SD and the negative intervals were measured on the live LSL stream/XDF (plan_changes.md:66, check_board_stream.py), not on the .db. The audit verdict for signal-timing-01 is PLAUSIBLE, downgraded to minor: 'Whether the .db `time` column has the same jitter is undocumented', and in 7 of 10 sessions every marker passed the 10 ms nearest-sample check. INITIAL_ANALYSIS.md §6 calls .db non-monotonicity UNKNOWN. Listing this under '검증된 사실' overstates it.",
+    "corrected_text": "`.db` 로더는 저장된 LSL 타임스탬프로 샘플을 시간순 재정렬할 뿐 dejitter·Sample 카운터 검증·기록 끊김 처리를 하지 않는다(코드 확인). Board LSL 스트림(XDF·실시간 점검)에서는 간격 SD 약 15.7 ms와 음수 간격이 보고되어 있으나, `.db` time 열에도 같은 지터가 있는지는 확인되지 않았다(감사 signal-timing-01: PLAUSIBLE).",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/RESEARCH_MAP.md",
+    "wrong_text": "`.db` 경로는 도착시각 타임스탬프(지터 SD≈15.7 ms, 음수 간격 보고)를 시간순 정렬만 하고 dejitter·샘플카운터 검증을 하지 않는다. 50 ms 창 ERP 특징에 직접 영향",
+    "evidence": "The cited INITIAL_ANALYSIS §6 marks the jitter effect as [추론/위험] ('약 16 ms 지터는 50 ms 창 ERP 특징을 흐리게 한다') and says whether .db t is non-monotonic is UNKNOWN. The audit verdict for signal-timing-01 is PLAUSIBLE/minor: the 15.7 ms SD was measured on the LSL stream/XDF, not the .db, and stored results suggest jitter at marker positions is mostly under 10 ms. 'Direct impact' is stated as fact without support.",
+    "corrected_text": "`.db` 경로는 저장된 LSL 타임스탬프를 시간순 정렬만 하고 dejitter·샘플카운터 검증을 하지 않는다(Board LSL 스트림에서는 간격 SD≈15.7 ms·음수 간격 보고, `.db`에서는 미확인). 지터가 있다면 50 ms 창 ERP 특징을 흐릴 수 있다(추론, E01에서 확인)",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/RESEARCH_MAP.md",
+    "wrong_text": "4채널 PTP 150 µV(유효율 출력 확인 후 선택)",
+    "evidence": "build_epochs.py:46-49 prints keep rates for 100/150/200/300 µV. But 150 µV is also the default of rgb_pipeline.epoch (rgb_pipeline.py:45 ptp_uv=150.0) and the value in synthetic_check.py and README.md:21. The audit verifiers (signal-timing-04, prereg-repro-02) say ''Chosen after inspecting keep rates' is not shown ... the order of decisions is unknown' and 'inference only'.",
+    "corrected_text": "4채널 PTP 150 µV(코드가 100/150/200/300 µV 유효율을 출력하지만 150 µV를 언제 정했는지는 불명. 150은 rgb_pipeline.epoch 기본값이기도 함)",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "P003 데이터는 팀의 미승인 결합 제안과 다르게 구성되었다(11-20 전체 포함, run-08의 블록 3 일부 포함 → 블록 3 시퀀스가 최대 세 CV 그룹에 등장).",
+    "evidence": "Including 11-20 is a file fact (build_epochs.py SESS, sessions.csv). That run-08's partial block 3 is included is inferred from the trial count (sessions.csv P003_1121 total 60 = 36 + 24). The audit verifier for prereg-repro-03 calls it 'inference, strongly supported', and v04c_position_oracle.py:7-8 marks the structure INFERRED. It is listed under §2.1 '검증된 사실 (파일·실행으로 확인)' without that qualifier.",
+    "corrected_text": "P003 데이터는 팀의 미승인 결합 제안과 다르게 구성되었다(11-20 전체 포함. 11-21 시행 수 60 = 블록 2 + 블록 3 12시퀀스로 보아 run-08의 블록 3 일부도 포함된 것으로 추론 → 블록 3 시퀀스가 최대 세 CV 그룹에 등장).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "직전 색만으로 BA 상한 39.4%, 블록 내 이력으로 51.4%, 블록의 마지막 시퀀스는 100% 결정된다(V-04, V-04b).",
+    "evidence": "39.4% is the prev-only ceiling (V04 0.3935). 51.4% is the accuracy of V-04b's heuristic 'counts+run' decoder (V04b/decoders.csv 0.5137), not a ceiling. sequence_plan samples uniformly over valid 6/6/6, max-run-2 blocks. An exact Bayes-optimal history observer over the 6,128,208 valid arrangements gets 52.0% (my DP computation), matching the audit verifier's 52.0% (confounds-quality-ethics-03). RESEARCH_MAP.md §0 row 2 and §2 ('블록 내 이력 51.4%') repeat the same phrasing.",
+    "corrected_text": "직전 색만으로 BA 상한 39.4%, 블록 내 이력(남은 개수 + 연속 제약 규칙 디코더)으로 51.4%(최적 관찰자는 약 52%), 블록의 마지막 시퀀스는 100% 결정된다(V-04, V-04b).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/RESEARCH_MAP.md",
+    "wrong_text": "P002는 색 무관 onset VEP(약 0.12 s 음전위, 0.27 s 양전위)가 그림에서 보이나",
+    "evidence": "In rgb-ml-analysis/results/erp_by_colour.png (P002 O1/O2), the large negativity at ~0.12 s is mainly in R (−4 to −4.5 µV); G has no dip there. The negativity shared by all three colours is at ~0.19–0.21 s (G −4.4 µV, B −4 µV on O2), followed by a shared positivity at ~0.27 s.",
+    "corrected_text": "P002는 세 색 공통 onset VEP(약 0.2 s 음전위, 약 0.27 s 양전위. 0.12 s 음전위는 주로 R)가 그림에서 보이나",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/RESEARCH_MAP.md",
+    "wrong_text": "gray1 대조 시행 수(115/87/60)가 obs 시행 수(533/243/136)보다 크게 적은 이유 미기록",
+    "evidence": "By design each sequence has one gray1 and two obs epochs (phases gray obs gray obs gray img; stim_rgb.py:11), so half the obs count is expected. At obs keep rates the expected gray1 counts are about 266/121/68 (audit statistics-08, confounds-quality-ethics-04). The real shortfall is 115 vs ~266 (P002), 87 vs ~121 (P003) and 60 vs ~68 (P08), not 115 vs 533.",
+    "corrected_text": "gray1 대조 시행 수(115/87/60)가 설계상 기대치(시퀀스당 1개, obs 유효율 적용 시 약 266/121/68)보다 적은 이유 미기록",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "참가자 간 순위 일치도도 낮다(Kendall's W 0.41).",
+    "evidence": "reports/runs/V01/stdout.log: 'Kendall's W across 4 subjects (19 pipelines) = 0.409, chi2(18) = 29.46, p = 0.043'. Nominally the concordance is above chance at α=0.05 (EXPERIMENT_LOG.md:33 reports the p-value). Calling it 'low' without the test result understates the agreement.",
+    "corrected_text": "참가자 간 순위 일치도는 중간 수준이다(Kendall's W 0.41, p = 0.043, 파이프라인 간 상관 때문에 근사).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "P002 블록 CV 44.7% → 새로운 날 36.0%, 새로운 사람 31–36%.",
+    "evidence": "generalization.csv: the 31.0–36.2% '새로운 사람' values are the '전체' rows, pooled over all 4 subjects (LOSO, trials pooled, across ERP O1·O2/4채널 ± EA). They are not P002-specific; P002's held-out LOSO accuracy is not stored (run_extra.py only prints per-subject values). The sentence reads as P002's own chain.",
+    "corrected_text": "P002 블록 CV 44.7% → 새로운 날 36.0%. 새로운 사람(4명 LOSO, 시행 합산)은 31.0–36.2%.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "자극 색은 이상적 sRGB에서 회색 배경과 명목상 등휘도다(차이 ≤ 0.6%).",
+    "evidence": "reports/runs/V02/stimulus_photometry.csv: the Michelson contrast vs grey is at most 0.58% (G −0.0058), but the luminance ratio to grey is G 0.9885, i.e. a 1.15% relative difference. The audit (confounds-quality-ethics-02) says 'within about 1%'. Without the word Michelson, '차이 ≤ 0.6%' understates the relative luminance difference.",
+    "corrected_text": "자극 색은 이상적 sRGB에서 회색 배경과 명목상 등휘도다(Michelson 대비 ≤ 0.6%, 휘도비 차이 ≤ 1.2%).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/STOP_REPORT.md",
+    "wrong_text": "참가자별 순열 null SD는 2.6–5.9 %p다(V-01).",
+    "evidence": "V01 null_spread.csv column 'null_sd_implied' and stdout 'Implied permutation-null SD per subject (normal approx. from null95)'. These values are back-calculated from the stored null95, not observed SDs, and audit statistics-09 says the null95 source for the 1000-permutation rows is unknown. Listed under '검증된 사실' without the qualifier.",
+    "corrected_text": "참가자별 순열 null SD는 저장된 null95에서 정규근사로 역산하면 2.6–5.9 %p다(V-01).",
+    "severity": "minor"
+   }
+  ],
+  "checked_summary": "I checked every number, file reference and factual claim in STOP_REPORT.md and RESEARCH_MAP.md against the V01–V04c run outputs, the audit JSON, the stored results CSVs and the PNG figure, the code, and the docs/config. The rgb-eeg-lab docs checked were plan_changes.md, research_context.md, protocol.json and config/CHANGELOG.md. There is no root CHANGELOG.md; the 2026-11-03 21:02 entry is in rgb-eeg-lab/config/CHANGELOG.md. I re-ran arithmetic in python3: a V-04c oracle with P001 trial rejection, and an exact ideal-observer DP for the 6/6/6, max-run-2 design. No project files were modified.\n\nConfirmed correct:\n- Stored-results numbers: methods.csv means and deltas (33.8 / 39.6, −3.3 to +5.8), soft voting / stacking 34.7 / 32.3, F6 33.4. sessions.csv keep rates (1–100%, P001 22–24%, P001_1119 1%, P003_1120 43%) and trial counts 83–533. gray1 n 115/87/60. Generalization 44.7→36.0, 39.4→37.3, new person 31.0–36.2.\n- V01: 28/28 PASS, Kendall's W 0.409, all 4 cross-subject picks ERP O1·O2, SD ratio 1.14–1.29.\n- V03: null range 24.6–39.8%. V03b: 0.334/0.335, 3 µV → 38.5/39.4%, SD ratio 1.11–1.28.\n- V04: P(current = previous) 0.206, prev-only ceiling 39.4%, drift B and permutation C results.\n- V04b: 51.4%, last sequence 100%. V04c: 1.0 / 0.934 / 1.0.\n- Pre-registered parameters (causal 1–30 Hz, per-segment reset, 5 s startup exclusion, −1~2 s, baseline −1.8~−1.0, 60/120/0.5 µV, Morlet 3 cycles, 4×4 bins over 0.1–1.5 s, C/γ grid, LOSO minimum 4).\n- Change 3 seed rule and the \"up to 11-24 all session-1 seed\" record. The IRB timeline (P01 at <time> vs the 21:02 note; P02 excluded). 3–4 visits vs the 1-visit plan. P08 1109a/b sharing one .db.\n- Code facts: no code writes the results CSVs; stacking cv=3; within-block trial-level permutation. statistics-01 is the only critical finding after verification, and 10 agents ran the audit. User code is unchanged.\n- EVALUATION_PROTOCOL §8/§11 references, the make_manifest CLI, and the budget sum (20 + 10 = 30; confounds area 5 runs).\n\nDiscrepancies found:\n- 2 errors: V-03 covered 18 pipelines, not 19; RESEARCH_MAP wrongly says data after 0.5 s are used only by F2d.\n- 4 overstatements: the V-04c oracle given as fact without its all-trials-kept assumption; .db arrival-time jitter and its \"direct impact\" stated as fact although the audit item is PLAUSIBLE (both documents); the 150 µV threshold described as chosen after seeing keep rates.\n- 8 minor wording and precision issues."
+ },
+ {
+  "task": "log-protocol",
+  "issues": [
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "Git: 실행 시점 HEAD `ad39d1d`(검증 스크립트는 미커밋 상태 → run.json `git_dirty: true`). 실행에 쓴 스크립트·입력 파일의 SHA-256을 run.json `file_sha256`에 기록했고, 같은 내용이 이 브랜치의 첫 보고 커밋에 들어간다.",
+    "evidence": "Only V01/V02/V03 run.json have git_commit ad39d1d7…. V03b, V04, V04b and V04c run.json all have git_commit 74c22d50c21020415360341e8384721d14811858. That is the first report commit itself ('Add initial research analysis, protocol draft and validation runs (WIP)', 16:52:40). `git show --stat 74c22d5` contains v01, v02, v03, v04, _synth and _runlog. It does not contain v03b_null_precision.py, v04b_sequence_predictability.py or v04c_position_oracle.py, which were first added in aa3469a. The SHA-256 values themselves match the current files.",
+    "corrected_text": "Git: V-01·V-02·V-03은 HEAD `ad39d1d`, V-03b·V-04·V-04b·V-04c는 HEAD `74c22d5`(첫 보고 커밋)에서 실행했다(모두 미커밋 변경 있음 → run.json `git_dirty: true`). 실행에 쓴 스크립트·입력 파일의 SHA-256은 run.json `file_sha256`에 기록했다. v01–v04·_synth·_runlog 스크립트는 첫 보고 커밋(74c22d5)에, v03b·v04b·v04c 스크립트는 다음 커밋(aa3469a)에 들어 있다.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "## V-03 — 저장된 19개 파이프라인의 합성 null 보정·민감도 (누수 점검) … 독립변수: 파이프라인(19)",
+    "evidence": "v03_synthetic_leakage.py names() returns the 16 rp.pipelines() plus only 2 EA variants ('F7 EA + ERP(4ch)+sLDA', 'F7 EA + xDAWN-TS+LR'). V03/summary.csv has 18 pipelines per condition. The 19th stored pipeline, 'F7 EA + sustained Cov-TS+LR' (methods.csv 'EA + 지속반응', which run_within.py:21-22 adds), was never evaluated. The same entry says '18개 상관 검정 중' at line 55, so the entry contradicts itself.",
+    "corrected_text": "## V-03 — 저장된 19개 중 18개 파이프라인의 합성 null 보정·민감도 (누수 점검; 'EA + 지속반응' 미포함) … 독립변수: 파이프라인(18)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md",
+    "wrong_text": "평균 BA가 1/3 ± 2 SE 안. (V-03에서 기존 19개 파이프라인에 적용.)",
+    "evidence": "V-03 tested 18 pipelines, not 19 (V03/summary.csv). V-03 also used a different criterion, 1/3 + 3 SE (EXPERIMENT_LOG line 50). Under the ±2 SE rule stated here, 4 of the 18 V-03 pipelines fail: F2a ERP(4ch)+sLDA t=2.63, F3a t=2.15, F2a ERP(O1,O2)+sLDA t=2.13, F3b t=2.01 (V03/summary.csv t_vs_1/3). §9 makes a 'synthetic null calibration failure (§10)' INVALID. So this rule contradicts the V-03 KEEP verdict that is cited as having applied it.",
+    "corrected_text": "평균 BA가 1/3 + 3 SE 이하 (V-03 기준). (V-03에서 기존 19개 중 18개 파이프라인에 적용, 'EA + 지속반응' 미포함. ±2 SE 기준이었다면 4개가 초과.)",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "1.5 µV 주입: ERP 기반 파이프라인 0.351–0.368 (null 대비 +1–2 %p), xDAWN·밴드파워·공분산 계열 0.340–0.343 (변화 거의 없음).",
+    "evidence": "In V03/summary.csv the signal-minus-null differences for the ERP-based pipelines run from +0.97 %p (F2a no-shrink) to +3.12 %p: F4b +3.12, F4a +2.90, F3a +2.61. F4c xDAWN-cov+MDM, which belongs to the xDAWN/covariance family, scored 0.3530 with signal against 0.3336 null, a gain of +1.93 %p. Only F2b 0.3396, F2c 0.3396, F2d 0.3404 and F7 EA+xDAWN 0.3426 fall in 0.340–0.343.",
+    "corrected_text": "1.5 µV 주입: ERP 기반 파이프라인 0.351–0.368 (null 대비 +1–3 %p), 밴드파워·xDAWN-TS·지속반응 공분산 계열 0.340–0.343 (변화 거의 없음). 단 xDAWN 공분산 + MDM(F4c)은 0.353 (+1.9 %p).",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "P002·P003·P001의 반복 세션은 같은 seed → 같은 색 순서.",
+    "evidence": "plan_changes.md:55 says all records up to 2026-11-24 used the session-1 seed, and that P002's next recording would start from -Session 2. INITIAL_ANALYSIS.md:78 gives P002_1125's seed as UNKNOWN (likely base+2+1000). The audit verdict for cv-leakage-01 (PLAUSIBLE) says 'P002_1125 probably used the session-2 seed'. V-04c in the same log models both cases (1.000 / 0.557).",
+    "corrected_text": "P001·P003의 반복 세션과 P002의 1111·1124 세션은 같은 seed → 같은 색 순서 (P002_1125의 seed는 기록 없음, 세션2 seed일 가능성).",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "저장된 평가 구조에서는 시행 위치만 정확히 알면 색을 거의 완벽히 맞힐 수 있다.",
+    "evidence": "V04c/position_oracle.csv shows near-perfect values only for P001 (1.0), P003 (0.934) and P002 when 1125 used the session-1 seed (1.0). If P002_1125 used the session-2 seed, the case the audit verdict calls probable, P002 drops to 0.5574. P08 is 0.3333.",
+    "corrected_text": "저장된 평가 구조에서 동일 seed 반복 세션이 있는 P001·P003(및 P002_1125가 세션1 seed인 경우의 P002)은 시행 위치만으로 색을 거의 완벽히(0.93–1.00) 맞힐 수 있다. P002_1125가 세션2 seed라면 0.557이다.",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "0.557 (세션2 seed일 때; 감사자 계산 0.789와 다름 — 동점 처리 방식 차이로 보임), P003 **0.934**",
+    "evidence": "In audit_findings_verified.json, cv-leakage-01's explanation gives P003 0.943 and 0.367 for distinct seeds. V-04c gets P003 0.934 and control 0.304, so these two values also differ from the auditor's. The log calls the run a reproduction and mentions only the P002 difference.",
+    "corrected_text": "0.557 (세션2 seed일 때; 감사자 계산 0.789와 다름 — 동점 처리 방식 차이로 보임), P003 **0.934** (감사자 0.943) … 대조 0.304 (감사자 0.367)",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "L-원뿔 R +0.47, G −0.12, B −0.36",
+    "evidence": "V02/stimulus_photometry.csv lists L_contrast R = 0.465, already rounded to 3 decimals. Recomputing with the v02 script's matrices gives 0.46483, which rounds to 0.46 at 2 decimals. The 0.47 comes from rounding twice.",
+    "corrected_text": "L-원뿔 R +0.46, G −0.12, B −0.36",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "`python research/validation/v01_results_audit.py` · 0.8 s",
+    "evidence": "V01/run.json \"duration_sec\": 0.71",
+    "corrected_text": "`python research/validation/v01_results_audit.py` · 0.7 s",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "반복 간 SD 0.017–0.033 (n = 540의 iid 이항 SD 0.020).",
+    "evidence": "In V03/summary.csv the smallest null SD is 0.01214, for F6 nested-tuned with n=3. The 0.017 lower bound (F3a 0.01729) holds only if F6 is left out, and the text does not say so.",
+    "corrected_text": "반복 간 SD 0.017–0.033 (20회 반복 파이프라인 기준; F6 3회는 0.012) (n = 540의 iid 이항 SD 0.020).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md",
+    "wrong_text": "run.json의 file_sha256은 실행 후 계산(실행 중 스크립트 미변경).",
+    "evidence": "The V03/run.json note says the hashed files were not modified, but '_runlog.py was extended (hash logging) while the run was in progress; this only affects metadata.' One imported helper script was therefore changed during the run.",
+    "corrected_text": "run.json의 file_sha256은 실행 후 계산(해시한 파일은 실행 중 미변경; 메타데이터용 _runlog.py만 실행 중 수정됨).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md",
+    "wrong_text": "같은 참가자의 세션이 **같은 seed**(2026-11-24 이전 모든 기록)면",
+    "evidence": "plan_changes.md:55 says '2026-11-24까지의 모든 기록은 세션 1 seed', which includes 11-24. P002_1124, recorded on 11-24, used the session-1 seed (audit cv-leakage-01 corrected_statement).",
+    "corrected_text": "같은 참가자의 세션이 **같은 seed**(2026-11-24까지의 모든 기록)면",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md",
+    "wrong_text": "매니페스트에는 파일명·크기·해시만 있다(신호값 없음).",
+    "evidence": "research/protocol/make_manifest.py:47-49 writes the columns root, rel_path, kind, size_bytes, sha256 and mtime_utc. That is the modification time and a file-kind guess on top of name, size and hash.",
+    "corrected_text": "매니페스트에는 파일 경로·종류·크기·해시·수정 시각만 있다(신호값 없음).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md",
+    "wrong_text": "2026-11-25까지 측정된 모든 세션은 이미 19개 파이프라인 비교·순열검정에 사용되었다",
+    "evidence": "build_epochs.py SESS and sessions.csv show that P001_1119 was excluded (2 clean trials) and that P02 11-03 was excluded (README.md:22). The complete P003 11-13 recording (plan_changes.md, '다른 완주 기록(11-13, 11-20)') is not in the analysis at all. Not every recorded session entered the 19-pipeline comparison.",
+    "corrected_text": "2026-11-25까지 측정된 분석 가능 세션(sessions.csv '사용' 9개)은 이미 19개 파이프라인 비교·순열검정에 사용되었다(P001_1119·P02 11-03·P003 11-13 등은 제외되었지만 같은 seed 또는 품질 문제로 독립 평가용이 아니다)",
+    "severity": "minor"
+   }
+  ],
+  "checked_summary": "I checked every numeric result in EXPERIMENT_LOG.md digit by digit against reports/runs/V01, V02, V03, V03b, V04, V04b and V04c (run.json, stdout.log, *.csv), and recomputed the arithmetic with python3. That covered the V-01 null-SD ratios, LOSO mean, Kendall W, cells above null95 and the 28/28 checks; the V-02 Y_rel, Michelson and cone contrasts (recomputed from the script's matrices); the V-03 means, t values, SD range, signal-minus-null deltas and score shape; the V-03b CIs and p values; the V-04 A/B/C/D values; the V-04b decoders and per-position accuracies; and the V-04c oracle values. I checked the claims against the validation scripts, _synth.py, rgb_pipeline.py, protocol.json/protocol.py, plan_changes.md, research_context.md, the stored results CSVs, the audit JSON (cv-leakage-01 is PLAUSIBLE; it has 5 dimensions, i.e. 5 auditors and 5 verifiers) and git history. All file SHA-256 values in run.json match the current files.\n\nEVALUATION_PROTOCOL §1 matches protocol.json and research_context.md: ERSP, Morlet 3 cycles, 3–30 Hz, 4×4 bins, the SVM grid, causal 4th-order 1–30 Hz filter, −1 to 2 s epoch, −1.8 to −1.0 s baseline, 60/120/0.5 µV QC, 5-fold outer CV, BA primary metric, 10,000-iteration bootstrap. The 1.11–1.28 and 1.14–1.29 ratios and the 51.4%/100% values match the run outputs.\n\nMain problems:\n- **Git HEAD:** V-03b through V-04c ran at 74c22d5, not ad39d1d, and three of the scripts are not in the first report commit.\n- **V-03 pipeline count:** V-03 evaluated 18 of the 19 pipelines ('EA + 지속반응' is missing), but both documents say 19.\n- **Calibration rule:** the protocol's ±2 SE rule contradicts V-03's 3 SE criterion. Under ±2 SE, 4 pipelines fail.\n- **V-03 sensitivity sentence:** it misstates the ERP gains (+1–3 %p, not +1–2) and leaves out xDAWN-cov+MDM, which rose to 0.353.\n- **P002 seed:** the shared seed for P002's repeated sessions is stated as fact, although P002_1125's seed is unknown.\n- **Minor:** several rounding, wording and scope slips."
+ },
+ {
+  "task": "completeness-critic",
+  "checked_summary": "I read every file under reports/: the README, INITIAL_ANALYSIS, EVALUATION_PROTOCOL, RESEARCH_MAP, EXPERIMENT_LOG, STOP_REPORT, AUDIT_FINDINGS, all seven runs/*/run.json with their stdout.log and result CSVs, the audit JSON (structure and identifier grep) and the three PNG figures. I also read every script under research/. I made no changes. I checked these things directly: the recorded SHA-256 hashes against the current files (all match), which commit each script went into, V-03 summary.csv and scores.csv (only 18 pipelines; F6 has 3 null reps), V-04 C_summary (false-positive rates from 20 reps), the V-04c tie-break logic, and a repo-wide grep for the hostname, Windows profile name and exact recording times.\n\nWhat is compliant:\n- RESEARCH_MAP covers all 14 required areas, each with problem, feasibility, effect, cost and priority, plus a budgeted E01–E20 list.\n- INITIAL_ANALYSIS covers 10 of the required topics and marks UNKNOWN where it should.\n- STOP_REPORT gives stop reasons, next actions and the three-way split of conclusions.\n- The Macro-F1 vs BA question is correctly raised for approval, not decided unilaterally.\n- No raw data was used or sent out, and the synthetic figures carry a \"not real EEG\" note.\n\nThe main gaps:\n1. The \"all 19 pipelines\" null-calibration claim is false: 18 were run, and F6 had only 3 reps.\n2. The protocol's own ±2 SE leakage rule would mark the baseline INVALID using V-03's own numbers.\n3. No evaluation script is fixed.\n4. No error logs are kept: stderr is not captured and the V-03/V-04 scripts suppress warnings.\n5. The git commit is mis-recorded for 4 runs.\n6. Some inferences and simulation results are presented as verified facts or counter-evidence.\n7. No figure has an interpretation, and the V-04 figure has further gaps.\n8. The Windows profile name, the hostname and exact recording times are copied into the shareable reports.\n9. Smaller items: shapes and configs missing from several runs, the audit has no run record, the manifest hash includes mtime, and the stimulus timeline is not described.",
+  "issues": [
+   {
+    "document": "reports/STOP_REPORT.md §2.1 item 6 (same claim in INITIAL_ANALYSIS.md §0 and §9 L1 and §15.1, EVALUATION_PROTOCOL.md §10.1, EXPERIMENT_LOG.md V-03 title and STEP 3, runs/V03/run.json purpose)",
+    "wrong_text": "색 정보가 없는 합성 데이터에서 19개 모두 null 평균이 1/3과 구분되지 않는다(V-03 ...)  /  V-03(19개 모두 null 평균 0.331–0.347)  /  (V-03에서 기존 19개 파이프라인에 적용.)",
+    "evidence": "runs/V03/summary.csv has 18 null rows, not 19. 'F7 EA + sustained Cov-TS+LR' is missing. v03_synthetic_leakage.py names() returns rp.pipelines() (16) plus only two EA variants. The V03 figure also has 18 rows, and scores.csv is 431 rows = 17×25 + 6. 'F6 nested-tuned ERP+sLDA' has count=3 null reps, not 20, so its '1/3 + 3 SE' test has almost no power. EXPERIMENT_LOG itself says '18개 상관 검정 중', which contradicts its own '파이프라인(19)'.",
+    "corrected_text": "Replace these statements with: 'V-03 tested 18 of the 19 stored pipelines. F7 EA + sustained Cov-TS+LR was not run, and F6 was run with only 3 null reps. 17 pipelines with 20 reps had null means of 0.331–0.347.' Then either add the missing EA+Cov-TS pipeline and ≥20 F6 reps and re-run as V-03c, or keep the limitation explicit in INITIAL_ANALYSIS §0/L1, STOP_REPORT 2.1.6 and EVALUATION_PROTOCOL §10, and correct run.json 'purpose'.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md §10.1 and §9 (INVALID)",
+    "wrong_text": "합성 null 보정: ... 20회 반복 → 평균 BA가 1/3 ± 2 SE 안  (with §9: INVALID = ... 합성 null 보정 실패(아래 §10))",
+    "evidence": "V-03 used a 3 SE criterion. Under the protocol's own 2 SE rule, V-03's 20-rep results put four existing pipelines outside the band: F2a ERP(4ch)+sLDA (the Baseline) t=2.63, F3a t=2.15, F2a ERP(O1,O2)+sLDA t=2.13, F3b t=2.01 (runs/V03/summary.csv). So the written rule would declare the Baseline and the main candidate INVALID. V-03b (200 reps) showed this was chance. A 2 SE band with 20 reps also has a ~5% false-fail rate per pipeline, with no multiplicity control.",
+    "corrected_text": "Set the rule before any E-xx run. The recommended rule: ≥200 null reps for any pipeline that will be compared to Baseline; pass if the 95% CI of the mean null BA contains 1/3, or if |mean − 1/3| < 1 pp equivalence bound. For screening with 20 reps, use a multiplicity-adjusted threshold (e.g. Bonferroni over the pipelines screened) and escalate failures to 200 reps instead of declaring INVALID. State in §10 that V-03 used 3 SE and V-03b 200 reps, and that the Baseline passes under the adopted rule.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md (whole document)",
+    "wrong_text": "No evaluation script is fixed. §1–§10 describe procedures (W1/W2/X1/X2 splits, Dummy baselines, sequence-level twin-shared permutation, metrics, bootstrap), but no script path is named, and research/ contains only make_manifest.py and validation scripts.",
+    "evidence": "The user's protocol item (2) explicitly requires an 'evaluation script'. research/protocol/ contains only make_manifest.py. The existing rgb-eeg-lab/scripts/train_svm.py is not designated, and does not implement W2/X1/X2 twin-aware grouping, Dummy classifiers or twin-shared permutations. rgb-ml-analysis code uses the deficient grouping (build_epochs.py:38).",
+    "corrected_text": "Add a §13 'Evaluation script' that names one entry point. Example: research/protocol/evaluate.py, with its SHA-256 or commit recorded at freeze. The script should take (manifest, pipeline spec, split ∈ {W1,W2,X1,X2}, seeds). It should output pooled and per-fold BA, Macro-F1, Accuracy, per-class recall, MCC and confusion matrices; Dummy (stratified, most_frequent, uniform) on identical folds; the sequence-level twin-shared permutation null; and the participant bootstrap. It also needs a synthetic self-test (V-03-style null and signal). Say that train_svm.py is the confirmatory W1 implementation, or wrap it. Until this exists, list it as a blocking item in §11 and STOP_REPORT §3.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md (all V-runs); research/validation/_runlog.py, v03_synthetic_leakage.py, v04_schedule_confounds.py",
+    "wrong_text": "No error log per run. _runlog.py docstring: 'stdout is tee'd to reports/runs/<RUN_ID>/stdout.log'. v03/v04: warnings.filterwarnings(\"ignore\") at import.",
+    "evidence": "Required field (4) is 'error logs'. Only stdout is captured; stderr, tracebacks and warnings are not. V-03 and V-04 globally suppress warnings, so LDA collinearity, LR/SVM convergence and pyriemann warnings from 19 pipelines × hundreds of fits are invisible. No run.json has an 'errors'/'warnings' field, and EXPERIMENT_LOG never states whether any run produced errors or warnings.",
+    "corrected_text": "Extend _runlog.Run so it tees sys.stderr to stderr.log, uses logging.captureWarnings(True) with warnings recorded at least once per (category, message) into warnings.log, and stores n_warnings and exit_status in run.json. Remove the blanket filterwarnings('ignore'), or replace it with a recorded filter list. Re-run V-03/V-04, or at least state per run in EXPERIMENT_LOG: 'errors: none recorded; warnings: suppressed (not logged)'.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md header (line 7); runs/*/run.json",
+    "wrong_text": "Git: 실행 시점 HEAD `ad39d1d`(검증 스크립트는 미커밋 상태 → run.json `git_dirty: true`). ... 같은 내용이 이 브랜치의 첫 보고 커밋에 들어간다.",
+    "evidence": "run.json git_commit for V03b, V04, V04b and V04c is 74c22d5, not ad39d1d. All 7 runs are git_dirty=true. The V03b, V04b and V04c scripts were first committed in aa3469a (second report commit), not the first report commit 74c22d5. Per-run commit hashes are not stated in any EXPERIMENT_LOG entry. Commands for V03–V04c are recorded as 'python v03_synthetic_leakage.py ...' (run from research/validation), while README gives repo-root paths.",
+    "corrected_text": "Add a per-run line to every V-xx entry, for example: 'git: HEAD=74c22d5 (dirty); code that produced it first committed in aa3469a; file_sha256 in run.json matches that commit (verified)'. Fix the header to say V-01, V-02 and V-03 ran at ad39d1d and V-03b through V-04c at 74c22d5. Record the working directory in run.json, or normalise commands to repo-root paths. For future runs, commit before running so git_dirty=false.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md V-04 STEP 7 (H4c); reports/STOP_REPORT.md §2.2 item 2; reports/INITIAL_ANALYSIS.md §9 L3/L4",
+    "wrong_text": "H4c **DISCARD (이 합성 조건 한정)**  /  STOP_REPORT: 반대 증거: ... 저장된 순열 방식도 합성 조건에서는 보정되었으며(V-04 C)  /  L3: ... → 이 경로의 위험은 낮아짐",
+    "evidence": "V-04 C used 20 reps per cell. 0/20 has a Clopper–Pearson 95% CI of [0, 0.168] and 2/20 of [0.012, 0.317], so a 5% vs ~15% false-positive rate cannot be distinguished (runs/V04/C_summary.csv). More importantly, _synth.py gives obs1 and obs2 independent noise, so the hypothesised failure mechanism (within-pair correlation breaking exchangeability) was not simulated at all. A simulation without the mechanism cannot refute it, yet STOP_REPORT cites it as counter-evidence for the real P002 result.",
+    "corrected_text": "Change H4c to INCONCLUSIVE, with this reason: 'underpowered (n=20; FPR CI up to ~17%) and obs1/obs2 within-pair correlation not simulated'. Remove V-04 C from the 'counter-evidence' list in STOP_REPORT 2.2.2, or reword it as 'in a simulation with independent trial noise and no position-locked signal, ...'. In L3, replace '위험은 낮아짐' with 'the simulated smooth-drift mechanism did not inflate BA; order-dependent and expectation mechanisms remain untested'. If the claim is kept, add a V-04 C rerun with ≥200 reps and an obs1/obs2 shared-noise component (ρ = 0.3 and 0.6).",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/STOP_REPORT.md §2.1 (검증된 사실) items 7, 10 and 11",
+    "wrong_text": "7. ... 저장된 CV(세션×블록 그룹)에서는 시퀀스 번호만 알아도 P001 100%, P003 93%, P002 100%(...)로 색을 맞힐 수 있다(V-04c).  11. P003 데이터는 ... run-08의 블록 3 일부 포함 → 블록 3 시퀀스가 최대 세 CV 그룹에 등장.  10. ... 같은 스트림에서 간격 SD 약 15.7 ms와 음수 간격이 보고되어 있다.",
+    "evidence": "INITIAL_ANALYSIS §4 labels the seed column and session composition '[추론: 날짜와 plan_changes.md 기준]', and the P003 block-3 duplication 'Ⅰ중복 의심 [추론]' (관측 수 일치 기반). v04c_position_oracle.py docstring says 'Session structures reconstructed ... (INFERRED)'. P003 0.934 depends on the inferred 1121 = seq 19–48 composition and on a single random tie-break draw (rng seed 0). For item 10, the 15.7 ms jitter and negative intervals were reported for the Board LSL stream. INITIAL_ANALYSIS §6 says whether the .db `t` is non-monotonic is UNKNOWN, and the audit says 'Whether the .db time column has the same jitter is undocumented'.",
+    "corrected_text": "Move items 7 and 11 to §2.2, or qualify them in place as '(추론된 세션 seed·구성 기준; events.csv seed/seq 열로 확인 필요)'. Keep only the documented part as fact: 'plan_changes 변경3 states all recordings before 2026-11-24 used the session-1 seed'. Reword item 10 as: 'The Board LSL stream (2026-11-22 check) showed interval SD ≈ 15.7 ms with negative intervals; whether the .db time column shares this is UNKNOWN (E01).'",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/STOP_REPORT.md §2.1 item 6",
+    "wrong_text": "기존 파이프라인의 전처리·특징선택·튜닝·증강은 학습 fold 안에서만 fit되며",
+    "evidence": "Audit cv-leakage-05 (CONFIRMED) says Euclidean Alignment uses each session's covariance from all trials, including the held-out block, before CV (run_within.py:20, rgb_pipeline.py:71). The stacking inner cv=3 is also ungrouped. INITIAL_ANALYSIS L5/L9 records both. The 'verified fact' omits these exceptions.",
+    "corrected_text": "Reword as: '...스케일러·특징선택·xDAWN·튜닝·증강은 학습 fold 안에서만 fit된다. 예외: EA 변형(F7)은 테스트 블록을 포함한 세션 전체 공분산을 사용(라벨 미사용, transductive), F8b 스태킹 내부 CV는 그룹 미지정(학습 fold 내부만 낙관적).'",
+    "severity": "overstatement"
+   },
+   {
+    "document": "reports/AUDIT_FINDINGS.md line 122 (confounds-quality-ethics-08); reports/INITIAL_ANALYSIS.md §2 line 48; reports/runs/AUDIT/audit_findings_verified.json",
+    "wrong_text": "They do expose a Windows profile name ('<user>') and the workstation hostname (<lab-PC-hostname>)...  /  팀 PC `C:\\Users\\<user>\\Documents\\BrainAccessData`",
+    "evidence": "These identifiers already exist in tracked lab files (rgb-ml-analysis/README.md:16, locks/stim-<lab-PC-hostname>*.json, labrecorder/rgb_eeg.cfg). The new reports copy them into the documents meant to be read and shared first, while also recommending anonymisation before any release (INITIAL_ANALYSIS §15.2 last bullet; audit fix text). The repo rule (CLAUDE.md:9) says team members can be EEG participants, so a profile name or initials can link to a participant. This conflicts with protocol rule (7), 'protect participant information'.",
+    "corrected_text": "Redact these in all report files and the audit JSON: replace with '<lab-PC hostname>' and 'C:\\Users\\<user>\\Documents\\BrainAccessData'. Keep the finding as 'a Windows profile name and the workstation hostname appear in rgb-ml-analysis/README.md:16 and rgb-eeg-lab/locks/*'. If the branch has been pushed, note that git history still contains them and leave the history rewrite to the team.",
+    "severity": "error"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §12 (line 185); reports/STOP_REPORT.md §1 (line 13); AUDIT_FINDINGS.md prereg-repro-08",
+    "wrong_text": "같은 날 <time>에 기록된 P01 본측정(`build_epochs.py:5`, `P01_main_20261103_<hhmmss>`)  /  같은 날 <time>에 기록된 P01(=P001_1103)",
+    "evidence": "The reports themselves flag 'pseudonyms are tied to exact session timestamps' as a re-identification risk (AUDIT confounds-quality-ethics-08; INITIAL_ANALYSIS §15.2). They then newly tie pseudonym P001 to an exact minute together with a possible IRB-eligibility problem, which is more sensitive than the bare filename in code.",
+    "corrected_text": "Use relative wording, for example: 'P001's first session was recorded earlier on the same day (2026-11-03) as the CHANGELOG entry saying worn-signal checks were planned after IRB approval (see build_epochs.py:5 for the exact time)'. Drop the full filename and the HH:MM:SS from the shareable reports, and give the team the exact time through a restricted channel.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/figures/V04_schedule_confounds.png",
+    "wrong_text": "No experiment ID in the image (panels titled only 'B ·' and 'C ·'). drift_amp has no unit or definition. Panel C has no uncertainty, and its drift_amp=1.0 bars are all 0 and invisible although they appear in the legend. Panels A and D of V-04 are not shown. There is no interpretation sentence.",
+    "evidence": "The figure footer gives the source, pipeline and an UNKNOWN limitation, but the requirement (5) items experiment ID, units, axis meaning and interpretation are incomplete. _synth.py defines drift_amp as a dimensionless relative modulation of VEP amplitude, h ∈ about [−0.5, 1]. C_summary: FPR 0/20, 2/20 and 1/20, where n=20 gives a resolution of 0.05.",
+    "corrected_text": "Add a suptitle 'V-04 (synthetic) · reports/runs/V04/{B,C}_summary.csv'. Label the x-axis 'drift_amp (dimensionless, fractional modulation of the onset-VEP amplitude; see _synth.py)'. Draw Clopper–Pearson 95% CIs on the panel C bars and annotate k/20, including '0/20' where the bar is empty. Either add A and D panels or state 'A, D: tables only'. Add a caption in EXPERIMENT_LOG V-04: 'Interpretation: no inflation from smooth drift in this simulation; the FPR test is underpowered (n=20) and did not model obs1/obs2 correlation.'",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/figures/V03_null_calibration.png",
+    "wrong_text": "The figure shows 18 pipelines without saying one is missing. The F6 row is based on 3 null reps and 3 signal reps, and the signal diamonds on 5 reps, with no error bars. The grey band is the iid-binomial ±1.96 SD, which is narrower than the observed rep-to-rep SD (up to 0.033 vs 0.020). There is no interpretation.",
+    "evidence": "runs/V03/summary.csv: F6 count=3, signal count=5. The footer only says 'Band = 1/3 ± 1.96·iid binomial SD. Not real EEG'.",
+    "corrected_text": "Add the footer note: 'F7 EA + sustained Cov-TS+LR not run; F6: 3 reps; ◆ = mean of 5 reps (F6: 3); band = iid binomial, actual CV null spread is wider (V-01/V-03b)'. Add 95% CI whiskers for the null means. Add a caption in EXPERIMENT_LOG with the interpretation: 'no pipeline's null mean differs from 1/3 beyond 3 SE; sensitivity to 1.5 µV is weak and is evidence only for ERP-based pipelines'.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/figures/V01_pipelines_vs_null.png and reports/EXPERIMENT_LOG.md (no figure captions anywhere)",
+    "wrong_text": "No figure has an interpretation statement. Figures appear in EXPERIMENT_LOG only as output paths. In V01, 'n=533' etc. is not defined, and the null band for P08/P001 comes from 200-permutation runs while P002/P003 use 1000, which is not stated.",
+    "evidence": "Requirement (5) asks for an interpretation for each figure. README only promises '데이터 출처·한계'. subjects.csv mixes n_perm=1000 (P002, P003) and n_perm=200 (P08, P001), per V01 stdout.",
+    "corrected_text": "Add a 'Figures' subsection to EXPERIMENT_LOG, with one caption per PNG covering: experiment ID, data source (real stored aggregates vs synthetic), units, axis meaning, a 1–2 sentence interpretation and limitations. For V01, also define 'n = valid obs trials' and state 'null band from n_perm=1000 (P002, P003) / 200 (P08, P001), normal approximation, estimated for the O1·O2 pipeline only'.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md §9 (KEEP criterion)",
+    "wrong_text": "KEEP: (a) nested 추정 BA가 Baseline보다 참가자 4명 중 3명 이상에서 높고, 참가자 평균 개선 ≥ 2 %p",
+    "evidence": "Under no true difference, P(≥3 of 4 participants higher) = 5/16 ≈ 0.31. The 2 pp threshold is below the per-participant null SD of 2.6–5.9 pp (V-01). No paired test of the pipeline difference is required, even though V-01 and audit statistics-02 identify the lack of paired tests as the core problem. The rule also hard-codes BA while the primary metric is still undecided (§11-A).",
+    "corrected_text": "Require a paired test on identical folds: a paired sequence-level permutation (or a paired bootstrap of the per-participant BA difference) with the null computed under the twin-shared scheme. Pass at p < 0.05 after correction over the E-xx count in the area, and also require ≥3/4 participants in the same direction. Write the criterion in terms of 'the primary metric chosen in §11-A'.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md §4 (W1) and §6",
+    "wrong_text": "W1 ... 세션별 블록 5-fold (leave-one-block-out)",
+    "evidence": "Several used sessions cannot support 5-fold within-session CV. P003_1121 has block 2 plus a partial block 3 (2 groups), and P003_1125 has blocks 3–5 (3 groups); V04c stdout shows P003 with 10 groups across 3 sessions. P08 1109a/b are two runs merged into one namespace. The §6 permutation scheme is defined only within blocks; there is no rule for X1/X2 (LOSO across sessions or participants).",
+    "corrected_text": "Add rules: minimum number of blocks per session for W1 (e.g. ≥4, otherwise report under W2 only or exclude, decided before results); how a partial block is treated; how P08 a/b are split by run; and permutation schemes for X1/X2 (permute sequence labels within each training and test participant or session, keeping twin structure).",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EVALUATION_PROTOCOL.md §8 (exploration validation data / final evaluation)",
+    "wrong_text": "탐색 단계의 모델 선택은 nested CV로 추정한다 ... 동결된 파이프라인으로 1회만 평가한다.",
+    "evidence": "Up to 30 E-xx experiments will reuse the same nested CV on the same 995 trials, so adaptive reuse of the dev set re-introduces selection bias that nested CV alone does not remove. The final evaluation lacks a success criterion (metric, test, threshold), a minimum number of new sessions or participants, and a power statement, even though V-03b shows that about 3 µV gives only about 39% at n=540.",
+    "corrected_text": "State that every KEEP decision counts toward a declared family, with multiplicity correction across all E-xx. Optionally reserve a locked subset (e.g. P002_1125 or the post-Change-3 sessions) as exploration validation data that is used only once per area. For §8 final evaluation, pre-specify the metric, test, alpha, the minimum N (sessions/participants with new seeds) and the expected detectable effect.",
+    "severity": "minor"
+   },
+   {
+    "document": "research/protocol/make_manifest.py (EVALUATION_PROTOCOL.md §2 data version)",
+    "wrong_text": "Writes one row per file: relative path, size in bytes, SHA-256, modification time (UTC) ... The SHA-256 of the manifest file itself is printed; record it in EVALUATION_PROTOCOL.md",
+    "evidence": "mtime_utc is part of the hashed manifest, so copying identical data to another machine, or restoring it, changes the 'data version' hash. The manifest also includes .db-wal and .db-shm files, which change whenever SQLite opens the database. mtime also adds recording-time metadata to a file that may be committed.",
+    "corrected_text": "Compute the frozen data-version hash from (rel_path, size_bytes, sha256) only, excluding mtime, and record mtime in a separate non-hashed column or file. Exclude -wal and -shm files, or checkpoint the databases first. Document this in EVALUATION_PROTOCOL §2.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/runs/*/run.json and reports/EXPERIMENT_LOG.md (V-02, V-03, V-03b, V-04, V-04b, V-04c)",
+    "wrong_text": "run.json \"shapes\": {} for V02, V04, V04b, V04c. Input/output shapes are absent from the log entries for V-02, V-03b, V-04, V-04b and V-04c. RNG seeds are not recorded for V-03 or V-04. V-02's photometric assumptions are not in the log. Per-participant results are not marked N/A for the synthetic runs.",
+    "evidence": "Requirement (4) lists config, input/output shapes and per-participant results. V-03 seeds (default_rng(10_000·signal + rep)) and V-04 seeds (1e6/2e6/3e6 + ...) exist only in code. V-03b's run.json does record its seeds. V-02's sRGB/D65/CIE 1931 2°/Hunt–Pointer–Estevez assumptions exist only in the script docstring. scores.csv uses the label 'null', which pandas reads as NaN by default (343 of 431 rows), so the file's condition column is silently lost on reload.",
+    "corrected_text": "Register shapes in every script, e.g. V-04 B X (540,4,840) × 540 rows, V-04b 20,000 blocks × 18, V-04c n_trials per structure. Add a 'config' block to run.json: CLI args, RNG seed formula, generator parameters (or the _synth.py hash plus key values), V-02 colour-science assumptions and the V-04c tie-break rule. Add 'per-participant: N/A (single synthetic subject)' to synthetic entries. Rename the condition 'null' to 'null_H0', or read with keep_default_na=False.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md V-04c",
+    "wrong_text": "0.557 (세션2 seed일 때; 감사자 계산 0.789와 다름 — 동점 처리 방식 차이로 보임)",
+    "evidence": "The discrepancy with the audit is left as speculation. v04c_position_oracle.py breaks ties randomly with a single draw (default_rng(0)). With twin plus non-twin sessions, many test trials are 1:1 ties, so 0.557 is one random realisation. P003's 0.934 is similarly affected. The tie rule is not documented as config.",
+    "corrected_text": "Report the expected BA over tie-breaks (analytic, or mean ± SD over ≥1000 rng seeds) and a deterministic variant (e.g. 'prefer twin-session label' or 'abstain'), and reconcile with the auditor's 0.789 by naming the rule each used. Until reconciled, mark the P002 session-2 value INCONCLUSIVE.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/EXPERIMENT_LOG.md V-03 STEP 6",
+    "wrong_text": "1.5 µV 주입: ERP 기반 파이프라인 0.351–0.368 (null 대비 +1–2 %p), xDAWN·밴드파워·공분산 계열 0.340–0.343 (변화 거의 없음)",
+    "evidence": "runs/V03/summary.csv, signal condition: F4c xDAWN-cov+MDM = 0.3530 (null 0.3336, +1.9 pp) and F8b stacking = 0.3511. F4b ERP+SVM-RBF = 0.3622 vs null 0.3310 (+3.1 pp) and F4a 0.3667 vs 0.3377 (+2.9 pp). These are outside the stated ranges.",
+    "corrected_text": "Reword as: '1.5 µV: ERP-based 0.351–0.368 (+1–3 pp vs null); xDAWN-TS, band-power and sustained-covariance 0.340–0.343; xDAWN-cov+MDM 0.353 (+1.9 pp); all from 5 reps (F6: 3), so these differences are within noise.'",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §15.1 table",
+    "wrong_text": "Column header '핵심 결과 (관찰된 사실)' covers V-01 (real stored aggregates) together with V-03/V-03b/V-04 (synthetic simulations) and V-02/V-04b/V-04c (design calculations), with no data-type column. Example cells: 'null 평균 0.331–0.347', '3 µV 주입 시 0.385 / 0.394', '매끄러운 시간 경과 + 동일 스케줄은 BA 상승 없음'.",
+    "evidence": "Several cells carry no 'synthetic' or 'simulation' qualifier, so a reader skimming the summary can take simulated BA values for real-data results. This is exactly the 'simulation mistaken for real-data' risk.",
+    "corrected_text": "Add a column '데이터 종류' with values 실데이터 집계(재생성 불가) / 합성 시뮬레이션 / 설계 계산(추론된 세션 구성 포함). Prefix the synthetic cells with '[합성]'. Apply the same labelling to the V-03b and V-04 lines in RESEARCH_MAP §1 and STOP_REPORT 2.1 items 5–6.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §6 (RGB stimulus and event-marker consistency)",
+    "wrong_text": "§6 covers markers and timestamps only. It does not describe the stimulus itself: RGB values, gray background, phase sequence per 'sequence' (gray1/obs1/…/obs2, imagery phases), phase durations, the v2.0 8-phase vs Change-1 6-phase difference, display refresh, or whether stim_rgb.py matches config/protocol.json.",
+    "evidence": "The required item is 'RGB stimulus and event-marker consistency'. RGB values (157,0,0)/(0,89,0)/(0,0,255)/(76,76,76) appear only in EXPERIMENT_LOG V-02. The 8-vs-6-phase designs are referenced in §4 and §10.8 but never defined. locks/stim-*-freeze.txt notes 'UNVERIFIED: 화면·주사율'.",
+    "corrected_text": "Add a §6.0 'Stimulus specification' with: colours and gray from protocol.json, the sequence/phase timeline with durations for v2.0 and Change-1, the frame-based duration (n_frames) vs nominal duration, the refresh rate (UNKNOWN if unverified), and a stated config-vs-stim code consistency check (file:line). Mark display timing UNKNOWN pending photodiode measurement.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §2 (real data samples)",
+    "wrong_text": "원본 데이터: 이 환경에 없음 → 실제 데이터 샘플 UNKNOWN.",
+    "evidence": "UNKNOWN is correct for raw EEG. But real data files are present: rgb-ml-analysis/results/*.csv (sessions, subjects, methods, controls, generalization) and rgb-eeg-lab/data/board_v3.0.0_stream_reference.json. No sample rows or fields from them are shown, although V-01 relies on them.",
+    "corrected_text": "Add 2–3 header rows from sessions.csv and subjects.csv, plus the relevant fields from the stream reference JSON (channel labels, nominal_srate, unit), with hostname and user fields redacted. Keep 'raw EEG/events samples: UNKNOWN'.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/AUDIT_FINDINGS.md header; reports/runs/AUDIT/",
+    "wrong_text": "독립 감사 1회 (에이전트 10개, 읽기 전용) — no run.json for the audit (no audited commit, prompts, start/end time, model or agent config).",
+    "evidence": "EXPERIMENT_LOG counts the audit in the budget table and the reports rely on its findings, but runs/AUDIT contains only audit_findings_verified.json, a list of 5 domain objects without metadata. The claim 'auditors were not given this report's conclusions' cannot be verified without the prompts.",
+    "corrected_text": "Add runs/AUDIT/run.json with: audited commit hash (and dirty state), start/end UTC, number and roles of agents, the exact prompts or instructions given to auditors and refuters, the file scope given, and the tool permissions (read-only). Reference it from EXPERIMENT_LOG as a run entry with a verdict.",
+    "severity": "minor"
+   },
+   {
+    "document": "reports/INITIAL_ANALYSIS.md §1; reports/README.md",
+    "wrong_text": "테스트 **33 passed** (이 환경에서 실행, 26.6 s)",
+    "evidence": "This is an executed verification, but it has no logged command output, no run.json and no commit hash. Package versions for mne, pyxdf, pylsl and pytest are not recorded anywhere.",
+    "corrected_text": "Save the pytest output to reports/runs/TESTS/stdout.log with a run.json (command 'cd rgb-eeg-lab && python -m pytest tests -q', commit, versions of pytest, mne, pyxdf and pylsl, duration). Otherwise mark the claim as 'not logged'.",
+    "severity": "minor"
+   }
+  ]
+ }
+]

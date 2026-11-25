@@ -1,7 +1,7 @@
-structure,n_trials,n_groups,position_oracle_bacc
-P001,360,10,1.0
-P002 (1125 = session-1 seed),540,15,1.0
-P002 (1125 = session-2 seed),540,15,0.5574
-P003,348,10,0.934
-P08,180,5,0.3333
-"control: 3 sessions, distinct seeds",540,15,0.3037
+structure,n_trials,n_groups,n_test_trials_tied,n_test_trials_unseen,expected_bacc
+P001,360,10,0,0,1.0
+P002 (1125 = session-1 seed),540,15,0,0,1.0
+P002 (1125 = session-2 seed),540,15,228,0,0.5778
+P003,348,10,0,36,0.931
+P08,180,5,0,180,0.3333
+"control: 3 sessions, distinct seeds",540,15,374,0,0.3074

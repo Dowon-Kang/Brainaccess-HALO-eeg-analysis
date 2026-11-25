@@ -1,0 +1,92 @@
+{
+ "run_id": "V03c",
+ "purpose": "Complete V-03 null calibration: EA + sustained Cov-TS+LR (20 reps) and F6 nested (reps 3..19)",
+ "command": "python research/validation/v03c_complete_null.py 20",
+ "cwd": "research/validation",
+ "started_utc": "2026-11-25T17:42:59+00:00",
+ "git_commit": "aa3469a84f2e30a883612bec3e24d411c4291690",
+ "git_dirty": true,
+ "platform": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.5.5",
+  "scipy": "1.18.1",
+  "sklearn": "1.9.1",
+  "pandas": "3.1.1",
+  "pyriemann": "0.12",
+  "matplotlib": "3.11.2"
+ },
+ "config": {
+  "R_NULL": 20,
+  "null_data_seed": "np.random.default_rng(rep) (same as V-03 null)",
+  "subject": "pid=2, 3 sessions, identical=False",
+  "cv": "rp.evaluate, groups = session x block (leave-one-block-out)",
+  "n_jobs": 4
+ },
+ "inputs": [
+  "rgb-ml-analysis/code/rgb_pipeline.py",
+  "rgb-eeg-lab/scripts/protocol.py",
+  "research/validation/_synth.py",
+  "research/validation/v03_synthetic_leakage.py",
+  "reports/runs/V03/scores.csv"
+ ],
+ "outputs": [
+  "reports/runs/V03c/scores_new.csv",
+  "reports/runs/V03c/null_scores_combined_V03_V03c.csv",
+  "reports/runs/V03c/null_summary_19_pipelines.csv"
+ ],
+ "shapes": {
+  "new_scores": [
+   37,
+   5
+  ],
+  "combined_null_scores": [
+   380,
+   5
+  ]
+ },
+ "metrics": {
+  "n_pipelines": 19,
+  "null_mean_range": [
+   0.331,
+   0.3469
+  ],
+  "max_t_vs_1/3": 2.627,
+  "min_count": 20,
+  "null_mean[F4b ERP+SVM-RBF]": 0.331,
+  "null_mean[F2d sustained Cov-TS+LR]": 0.3315,
+  "null_mean[F7 EA + sustained Cov-TS+LR]": 0.3331,
+  "null_mean[F3c ERP+PCA10+sLDA]": 0.3332,
+  "null_mean[F4c xDAWN-cov+MDM]": 0.3336,
+  "null_mean[F4a ERP+SVM-linear]": 0.3377,
+  "null_mean[F6 nested-tuned ERP+sLDA]": 0.3378,
+  "null_mean[F2b BandPower+sLDA]": 0.338,
+  "null_mean[F1 ERP+sLDA +augment]": 0.3387,
+  "null_mean[F8b stacking(ERP,TS,BP)]": 0.3408,
+  "null_mean[F7 EA + xDAWN-TS+LR]": 0.3411,
+  "null_mean[F2c xDAWN-TS+LR]": 0.3416,
+  "null_mean[F3a ERP+MI-k20+sLDA]": 0.3417,
+  "null_mean[F8a soft-voting(ERP,TS,BP)]": 0.3424,
+  "null_mean[F7 EA + ERP(4ch)+sLDA]": 0.3427,
+  "null_mean[F2a ERP(4ch)+LDA(no shrink)]": 0.3432,
+  "null_mean[F3b ERP+RFE20+sLDA]": 0.3451,
+  "null_mean[F2a ERP(4ch)+sLDA]": 0.3454,
+  "null_mean[F2a ERP(O1,O2)+sLDA]": 0.3469
+ },
+ "notes": [],
+ "raw_eeg_used": false,
+ "file_sha256": {
+  "research/validation/v03c_complete_null.py": "28c19012f7b46bbb30d3a8a20303f8629e6e8fb9d14cdcdcd1e9c4604f6647b8",
+  "research/validation/_runlog.py": "0b183944bf32f0bcd318f383adf62d07fe595e2694fbd2e0b2ac1bcb91f393f7",
+  "rgb-ml-analysis/code/rgb_pipeline.py": "c64b1cc6f610521bf346e4630b67276733aea0847c5abe11905e3ea0381e1536",
+  "rgb-eeg-lab/scripts/protocol.py": "ac1469df3a4f9978d4f09c8691604e23eb08dd1a1b1f6a31cc4d4a9961777b99",
+  "research/validation/_synth.py": "f1f1a213b8674b0097e40da95ec10a4a5db708f7b1a145ba4a85965c74916919",
+  "research/validation/v03_synthetic_leakage.py": "fdb9562cad65d6257620b181d6c6a281ff6a4c05fe7451ea9655a26990633ca7",
+  "reports/runs/V03/scores.csv": "e24bddc8b014b6534b646790e5d9eba6093b30ba0953b628dbb557d0c9677c9b"
+ },
+ "exit_status": "ok",
+ "finished_utc": "2026-11-25T17:56:32+00:00",
+ "duration_sec": 812.76,
+ "warnings_total": 1280,
+ "warnings_distinct": 1
+}
